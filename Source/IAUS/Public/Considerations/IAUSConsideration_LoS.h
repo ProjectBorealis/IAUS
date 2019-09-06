@@ -1,0 +1,22 @@
+// Copyright 2017-2018 Arran Walker
+
+#pragma once
+
+#include "CoreMinimal.h"
+
+#include "Decorators/IAUSBTDecorator_Consideration.h"
+
+#include "IAUSConsideration_LoS.generated.h"
+
+/**
+ *
+ */
+UCLASS(Meta = (DisplayName = "Line of Sight Consideration", Category = "Considerations"))
+class IAUS_API UIAUSConsideration_LoS : public UIAUSBTDecorator_Consideration
+{
+	GENERATED_BODY()
+	UIAUSConsideration_LoS();
+
+public:
+	virtual float Score(const struct FIAUSBehaviorContext& Context) const override;
+};
