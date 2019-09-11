@@ -41,4 +41,6 @@ void FIAUSBTDecorator_ConsiderationDetails::CustomizeDetails(IDetailLayoutBuilde
 
 	PreviewWidget->ResponseCurve = Consideration->ResponseCurve;
 }
+
+#undef LOCTEXT_NAMESPACE
 #endif
