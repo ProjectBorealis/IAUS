@@ -15,18 +15,7 @@ void UIAUSHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AActor* MyOwner = GetOwner();
-	if (MyOwner)
-	{
-		MyOwner->OnTakeAnyDamage.AddDynamic(this, &UIAUSHealthComponent::HandleTakeAnyDamage);
-	}
-
 	Health = MaxHealth;
-}
-
-void UIAUSHealthComponent::HandleTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
-{
-	Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
 }
 
 void UIAUSHealthComponent::Heal(float HealAmount)
