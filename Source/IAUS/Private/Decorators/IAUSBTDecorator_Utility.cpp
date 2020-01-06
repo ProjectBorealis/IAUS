@@ -58,7 +58,7 @@ void UIAUSBTDecorator_Utility::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		return;
 	}
 
-	// Intertia check - Give behavior a moment to stabalize before we start looking for other things to do
+	// Intertia check - Give behavior a moment to stabilize before we start looking for other things to do
 	if ((DecoratorMemory->ParentMemory->LastBehaviorChangeTime + IntertiaWeight) >= GetWorld()->GetTimeSeconds())
 	{
 		return;
