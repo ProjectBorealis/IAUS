@@ -1,10 +1,10 @@
-// Copyright 2017-2018 Arran Walker
+// Copyright 2017-2020 Project Borealis
 
 #include "IAUS/Public/Considerations/IAUSConsideration_Health.h"
 
 #include "AIController.h"
 
-#include "Components/IAUSHealthComponent.h"
+#include "Components/IAUSBaseHealthComponent.h"
 #include "IAUSEvaluator.h"
 
 UIAUSConsideration_Health::UIAUSConsideration_Health()
@@ -20,11 +20,11 @@ float UIAUSConsideration_Health::Score(const FIAUSBehaviorContext& Context) cons
 		Actor = Context.AIController->GetPawn();
 	}
 
-	const UIAUSHealthComponent* HealthComponent = Cast<UIAUSHealthComponent>(Actor->GetComponentByClass(UIAUSHealthComponent::StaticClass()));
+	const UIAUSBaseHealthComponent* HealthComponent = Actor->FindComponentByClass<UIAUSBaseHealthComponent>());
 
-	if (!HealthComponent)
+	if (!HealthComponent || HealthComponent->GetMaxHealth() <= 0.0f)
 	{
-		return 0;
+		return 1.0f;
 	}
 
 	return ResponseCurve->ComputeValue(HealthComponent->GetHealth() / HealthComponent->GetMaxHealth());

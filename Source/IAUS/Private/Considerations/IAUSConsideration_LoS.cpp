@@ -1,11 +1,10 @@
-// Copyright 2017-2018 Arran Walker
+// Copyright 2017-2020 Project Borealis
 
 #include "IAUS/Public/Considerations/IAUSConsideration_LoS.h"
 
 #include "AIController.h"
 
 #include "IAUSEvaluator.h"
-#include "Components/IAUSHealthComponent.h"
 
 UIAUSConsideration_LoS::UIAUSConsideration_LoS()
 {

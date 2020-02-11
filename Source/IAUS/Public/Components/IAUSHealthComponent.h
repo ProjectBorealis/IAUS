@@ -1,15 +1,15 @@
-// Copyright 2017-2018 Arran Walker
+// Copyright 2017-2020 Project Borealis
 
 #pragma once
 
 #include "CoreMinimal.h"
 
-#include "Components/ActorComponent.h"
+#include "IAUS/Public/Components/IAUSBaseHealthComponent.h"
 
 #include "IAUSHealthComponent.generated.h"
 
-UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class IAUS_API UIAUSHealthComponent : public UActorComponent
+UCLASS(ClassGroup = AI, meta = (BlueprintSpawnableComponent))
+class IAUS_API UIAUSHealthComponent : public UIAUSBaseHealthComponent
 {
 	GENERATED_BODY()
 
@@ -26,12 +26,12 @@ protected:
 	float MaxHealth;
 
 public:
-	float GetHealth() const;
+	virtual float GetHealth() const override;
 
-	float GetMaxHealth() const;
+	virtual float GetMaxHealth() const override;
 
 	UFUNCTION(BlueprintCallable, Category = "HealthComponent")
-	void Heal(float HealAmount);
+	virtual void Heal(float HealAmount) override;
 
-	void ReduceHealth(float Damage);
+	virtual void ReduceHealth(float Damage) override;
 };

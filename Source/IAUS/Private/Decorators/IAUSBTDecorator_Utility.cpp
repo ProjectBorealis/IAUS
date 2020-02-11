@@ -1,4 +1,4 @@
-// Copyright 2017-2018 Arran Walker
+// Copyright 2017-2020 Project Borealis
 
 #include "IAUS/Public/Decorators/IAUSBTDecorator_Utility.h"
 

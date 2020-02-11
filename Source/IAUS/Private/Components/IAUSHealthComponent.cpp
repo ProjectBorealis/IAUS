@@ -1,4 +1,4 @@
-// Copyright 2017-2018 Arran Walker
+// Copyright 2017-2020 Project Borealis
 
 #include "IAUS/Public/Components/IAUSHealthComponent.h"
 
@@ -7,7 +7,7 @@
 // Sets default values for this component's properties
 UIAUSHealthComponent::UIAUSHealthComponent()
 {
-	MaxHealth = 100;
+	MaxHealth = 100.0f;
 }
 
 // Called when the game starts

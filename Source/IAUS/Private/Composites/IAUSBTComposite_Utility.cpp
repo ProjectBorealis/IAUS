@@ -1,4 +1,4 @@
-// Copyright 2017-2018 Arran Walker
+// Copyright 2017-2020 Project Borealis
 
 #include "IAUS/Public/Composites/IAUSBTComposite_Utility.h"
 #include "IAUS/Public/Composites/IAUSBTComposite_Behavior.h"
