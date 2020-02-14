@@ -30,7 +30,6 @@ public:
 
 	virtual float GetMaxHealth() const override;
 
-	UFUNCTION(BlueprintCallable, Category = "HealthComponent")
 	virtual void Heal(float HealAmount) override;
 
 	virtual void ReduceHealth(float Damage) override;

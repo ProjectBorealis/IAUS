@@ -14,12 +14,15 @@ class IAUS_API UIAUSBaseHealthComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
+    UFUNCTION(BlueprintCallable, Category = "HealthComponent")
 	virtual float GetHealth() const;
 
+    UFUNCTION(BlueprintCallable, Category = "HealthComponent")
 	virtual float GetMaxHealth() const;
 
 	UFUNCTION(BlueprintCallable, Category = "HealthComponent")
 	virtual void Heal(float HealAmount);
 
+    UFUNCTION(BlueprintCallable, Category = "HealthComponent")
 	virtual void ReduceHealth(float Damage);
 };
