@@ -20,7 +20,7 @@ float UIAUSConsideration_Health::Score(const FIAUSBehaviorContext& Context) cons
 		Actor = Context.AIController->GetPawn();
 	}
 
-	const UIAUSBaseHealthComponent* HealthComponent = Actor->FindComponentByClass<UIAUSBaseHealthComponent>());
+	const UIAUSBaseHealthComponent* HealthComponent = Actor->FindComponentByClass<UIAUSBaseHealthComponent>();
 
 	if (!HealthComponent || HealthComponent->GetMaxHealth() <= 0.0f)
 	{
