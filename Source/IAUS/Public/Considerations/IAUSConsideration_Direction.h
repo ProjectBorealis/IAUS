@@ -1,4 +1,4 @@
-// Copyright 2019 Zachary Swoyer, Arran Walker
+// Copyright Project Borealis
 
 #pragma once
 
