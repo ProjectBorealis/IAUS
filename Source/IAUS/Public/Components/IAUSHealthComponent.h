@@ -30,7 +30,7 @@ public:
 
 	virtual float GetMaxHealth() const override;
 
-	virtual void Heal(float HealAmount) override;
+	virtual void Heal(float HealAmount, bool bForce) override;
 
 	virtual void ReduceHealth(float Damage) override;
 };

@@ -18,9 +18,9 @@ void UIAUSHealthComponent::BeginPlay()
 	Health = MaxHealth;
 }
 
-void UIAUSHealthComponent::Heal(float HealAmount)
+void UIAUSHealthComponent::Heal(float HealAmount, bool bForce)
 {
-	if (HealAmount <= 0.0f || Health <= 0.0f)
+	if (!bForce && (HealAmount <= 0.0f || Health <= 0.0f))
 	{
 		return;
 	}

@@ -21,7 +21,7 @@ public:
 	virtual float GetMaxHealth() const;
 
 	UFUNCTION(BlueprintCallable, Category = "HealthComponent")
-	virtual void Heal(float HealAmount);
+	virtual void Heal(float HealAmount, bool bForce = false);
 
     UFUNCTION(BlueprintCallable, Category = "HealthComponent")
 	virtual void ReduceHealth(float Damage);

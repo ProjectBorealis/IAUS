@@ -4,7 +4,7 @@
 
 #include "GameFramework/Actor.h"
 
-void UIAUSBaseHealthComponent::Heal(float HealAmount)
+void UIAUSBaseHealthComponent::Heal(float HealAmount, bool bForce)
 {
 }
 
