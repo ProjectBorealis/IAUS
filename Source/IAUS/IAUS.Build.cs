@@ -9,35 +9,35 @@ public class IAUS : ModuleRules
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        PrecompileForTargets = PrecompileTargetsType.Any;
+		PrecompileForTargets = PrecompileTargetsType.Any;
 
-        PublicIncludePaths.AddRange(new string[] {
-            Path.Combine(ModuleDirectory, "Public/Components"),
-            Path.Combine(ModuleDirectory, "Public/Composites"),
-            Path.Combine(ModuleDirectory, "Public/Considerations"),
-            Path.Combine(ModuleDirectory, "Public/Decorators"),
-            Path.Combine(ModuleDirectory, "Public")
-        });
+		PublicIncludePaths.AddRange(new string[] {
+			Path.Combine(ModuleDirectory, "Public/Components"),
+			Path.Combine(ModuleDirectory, "Public/Composites"),
+			Path.Combine(ModuleDirectory, "Public/Considerations"),
+			Path.Combine(ModuleDirectory, "Public/Decorators"),
+			Path.Combine(ModuleDirectory, "Public")
+		});
 
-        PublicDependencyModuleNames.AddRange(
-            new string[] {
-                "Core",
-                "CoreUObject",
-                "Engine",
-                "AIModule",
-                "GameplayTasks",
-            }
-        );
+		PublicDependencyModuleNames.AddRange(
+			new string[] {
+				"Core",
+				"CoreUObject",
+				"Engine",
+				"AIModule",
+				"GameplayTasks",
+			}
+		);
 
-        if (Target.Type == TargetRules.TargetType.Editor)
-        {
-            PublicDependencyModuleNames.AddRange(
-                new string[] {
-                    "Slate",
-                    "SlateCore",
-                    "EditorStyle",
-                }
-            );
-        }
-    }
+		if (Target.Type == TargetRules.TargetType.Editor)
+		{
+			PublicDependencyModuleNames.AddRange(
+				new string[] {
+					"Slate",
+					"SlateCore",
+					"EditorStyle",
+				}
+			);
+		}
+	}
 }

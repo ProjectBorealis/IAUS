@@ -6,9 +6,7 @@
 
 #include "AIController.h"
 
-UIAUSConsideration_Direction::UIAUSConsideration_Direction()
-{
-}
+UIAUSConsideration_Direction::UIAUSConsideration_Direction() {}
 
 float UIAUSConsideration_Direction::Score(const FIAUSBehaviorContext& Context) const
 {

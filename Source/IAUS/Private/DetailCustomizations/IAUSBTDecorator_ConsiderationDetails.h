@@ -7,12 +7,10 @@
 class FIAUSBTDecorator_ConsiderationDetails : public IDetailCustomization
 {
 public:
-
 	static TSharedRef<IDetailCustomization> MakeInstance();
 
 	void CustomizeDetails(IDetailLayoutBuilder& DetailBuilder) override;
 
 	TSharedPtr<class SResponseCurvePreviewWidget> PreviewWidget;
-
 };
 #endif

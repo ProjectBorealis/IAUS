@@ -6,21 +6,21 @@
 #include "Decorators/IAUSBTDecorator_Consideration.h"
 #include "DetailCustomizations/SResponseCurvePreviewWidget.h"
 
+#include "Editor/PropertyEditor/Public/DetailCategoryBuilder.h"
 #include "Editor/PropertyEditor/Public/DetailLayoutBuilder.h"
 #include "Editor/PropertyEditor/Public/DetailWidgetRow.h"
-#include "Editor/PropertyEditor/Public/DetailCategoryBuilder.h"
 
 #define LOCTEXT_NAMESPACE "IAUSBTDecorator_ConsiderationDetails"
 
 TSharedRef<IDetailCustomization> FIAUSBTDecorator_ConsiderationDetails::MakeInstance()
 {
-	return MakeShareable( new FIAUSBTDecorator_ConsiderationDetails );
+	return MakeShareable(new FIAUSBTDecorator_ConsiderationDetails);
 }
 
 void FIAUSBTDecorator_ConsiderationDetails::CustomizeDetails(IDetailLayoutBuilder& DetailLayout)
 {
 	TWeakObjectPtr<UIAUSBTDecorator_Consideration> Consideration;
-	TArray<TWeakObjectPtr<UObject> > EditedObjects;
+	TArray<TWeakObjectPtr<UObject>> EditedObjects;
 	DetailLayout.GetObjectsBeingCustomized(EditedObjects);
 	for (int32 i = 0; i < EditedObjects.Num(); i++)
 	{
@@ -34,10 +34,7 @@ void FIAUSBTDecorator_ConsiderationDetails::CustomizeDetails(IDetailLayoutBuilde
 
 	// scoring & filter function preview
 	IDetailCategoryBuilder& PreviewCategory = DetailLayout.EditCategory("Preview");
-	PreviewCategory.AddCustomRow(LOCTEXT("Preview", "Preview")).WholeRowWidget
-		[
-			SAssignNew(PreviewWidget, SResponseCurvePreviewWidget)
-		];
+	PreviewCategory.AddCustomRow(LOCTEXT("Preview", "Preview")).WholeRowWidget[SAssignNew(PreviewWidget, SResponseCurvePreviewWidget)];
 
 	PreviewWidget->ResponseCurve = Consideration->ResponseCurve;
 }

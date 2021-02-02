@@ -14,7 +14,8 @@ void FIAUSModule::StartupModule()
 {
 #if WITH_EDITOR
 	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
-	PropertyModule.RegisterCustomClassLayout("IAUSBTDecorator_Consideration", FOnGetDetailCustomizationInstance::CreateStatic(&FIAUSBTDecorator_ConsiderationDetails::MakeInstance));
+	PropertyModule.RegisterCustomClassLayout("IAUSBTDecorator_Consideration",
+											 FOnGetDetailCustomizationInstance::CreateStatic(&FIAUSBTDecorator_ConsiderationDetails::MakeInstance));
 	PropertyModule.NotifyCustomizationModuleChanged();
 #endif
 }

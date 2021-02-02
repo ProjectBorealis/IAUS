@@ -2,12 +2,12 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "BehaviorTree/Composites/BTComposite_Selector.h"
+#include "CoreMinimal.h"
 #include "IAUSBTComposite_Behavior.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class IAUS_API UIAUSBTComposite_Behavior : public UBTComposite_Selector

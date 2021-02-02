@@ -6,9 +6,7 @@
 
 #include "IAUSEvaluator.h"
 
-UIAUSConsideration_LoS::UIAUSConsideration_LoS()
-{
-}
+UIAUSConsideration_LoS::UIAUSConsideration_LoS() {}
 
 float UIAUSConsideration_LoS::Score(const FIAUSBehaviorContext& Context) const
 {

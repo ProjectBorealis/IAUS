@@ -33,8 +33,7 @@ FIAUSBehaviorContext IAUSEvaluator::ChooseBehavior(AAIController* Controller, co
 			{
 				ETeamAttitude::Type Attitude = Controller->GetTeamAttitudeTowards(*Actor);
 				if ((Attitude == ETeamAttitude::Friendly && !Behaviors[Idx].bTargetFriendly) ||
-					(Attitude == ETeamAttitude::Neutral && !Behaviors[Idx].bTargetNeutral) ||
-					(Attitude == ETeamAttitude::Hostile && !Behaviors[Idx].bTargetHostile))
+					(Attitude == ETeamAttitude::Neutral && !Behaviors[Idx].bTargetNeutral) || (Attitude == ETeamAttitude::Hostile && !Behaviors[Idx].bTargetHostile))
 				{
 					continue;
 				}

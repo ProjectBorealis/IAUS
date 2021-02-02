@@ -30,8 +30,8 @@ protected:
 	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;
 	virtual uint16 GetInstanceMemorySize() const override;
 
-	/** Inertia weight. This is the time we allow a behavior 
-	    to stabilize before we attempt to choose a new behavior */
+	/** Inertia weight. This is the time we allow a behavior
+		to stabilize before we attempt to choose a new behavior */
 	UPROPERTY(EditAnywhere, Category = Blackboard)
 	float IntertiaWeight;
 

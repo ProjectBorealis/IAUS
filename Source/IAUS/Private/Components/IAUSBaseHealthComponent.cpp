@@ -4,9 +4,7 @@
 
 #include "GameFramework/Actor.h"
 
-void UIAUSBaseHealthComponent::Heal(float HealAmount, bool bForce)
-{
-}
+void UIAUSBaseHealthComponent::Heal(float HealAmount, bool bForce) {}
 
 float UIAUSBaseHealthComponent::GetHealth() const
 {
@@ -18,6 +16,4 @@ float UIAUSBaseHealthComponent::GetMaxHealth() const
 	return 100.0f;
 }
 
-void UIAUSBaseHealthComponent::ReduceHealth(float Damage)
-{
-}
+void UIAUSBaseHealthComponent::ReduceHealth(float Damage) {}
