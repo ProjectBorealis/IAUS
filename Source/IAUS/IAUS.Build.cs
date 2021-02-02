@@ -11,16 +11,8 @@ public class IAUS : ModuleRules
 
 		PrecompileForTargets = PrecompileTargetsType.Any;
 
-		PublicIncludePaths.AddRange(new string[] {
-			Path.Combine(ModuleDirectory, "Public/Components"),
-			Path.Combine(ModuleDirectory, "Public/Composites"),
-			Path.Combine(ModuleDirectory, "Public/Considerations"),
-			Path.Combine(ModuleDirectory, "Public/Decorators"),
-			Path.Combine(ModuleDirectory, "Public")
-		});
-
 		PublicDependencyModuleNames.AddRange(
-			new string[] {
+			new [] {
 				"Core",
 				"CoreUObject",
 				"Engine",
@@ -32,7 +24,7 @@ public class IAUS : ModuleRules
 		if (Target.Type == TargetRules.TargetType.Editor)
 		{
 			PublicDependencyModuleNames.AddRange(
-				new string[] {
+				new [] {
 					"Slate",
 					"SlateCore",
 					"EditorStyle",
