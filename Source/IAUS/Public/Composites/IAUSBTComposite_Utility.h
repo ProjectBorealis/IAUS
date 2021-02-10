@@ -15,7 +15,6 @@ struct FIAUSBTCompositeUtilityMemory : public FBTCompositeMemory
 	IAUSEvaluator Evaluator;
 	FIAUSBehaviorContext Context;
 	float LastBehaviorChangeTime;
-	bool LastBehaviorFailed;
 
 	UBehaviorTreeComponent* OwnerComp;
 };

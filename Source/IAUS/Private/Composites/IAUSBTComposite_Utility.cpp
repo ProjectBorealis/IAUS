@@ -71,7 +71,7 @@ int32 UIAUSBTComposite_Utility::GetNextChildHandler(FBehaviorTreeSearchData& Sea
 	AActor* TargetActor = nullptr;
 
 	// If the last behavior failed and is the same as the next, return to parent to prevent an infinite loop
-	if (!Memory->LastBehaviorFailed || PrevChild != Memory->Context.BehaviorIndex || LastResult != EBTNodeResult::Failed)
+	if (LastResult != EBTNodeResult::Failed || PrevChild != Memory->Context.BehaviorIndex)
 	{
 		if (Memory->Context.TotalScore != 0)
 		{
@@ -79,8 +79,6 @@ int32 UIAUSBTComposite_Utility::GetNextChildHandler(FBehaviorTreeSearchData& Sea
 			TargetActor = Memory->Context.Actor;
 		}
 	}
-
-	Memory->LastBehaviorFailed = (LastResult == EBTNodeResult::Failed);
 
 	SearchData.OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Object>(BlackboardTargetKey.GetSelectedKeyID(), TargetActor);
 	if (TargetActor)
