@@ -1,12 +1,12 @@
-// Copyright 2017-2020 Project Borealis
+// Copyright Project Borealis. All rights reserved.
 
 #pragma once
 
 #include "CoreMinimal.h"
 
-#include "IAUSEvaluator.h"
-
 #include "BehaviorTree/BTCompositeNode.h"
+
+#include "IAUSEvaluator.h"
 
 #include "IAUSBTComposite_Utility.generated.h"
 
@@ -15,6 +15,7 @@ struct FIAUSBTCompositeUtilityMemory : public FBTCompositeMemory
 	IAUSEvaluator Evaluator;
 	FIAUSBehaviorContext Context;
 	float LastBehaviorChangeTime;
+	bool LastBehaviorFailed;
 
 	UBehaviorTreeComponent* OwnerComp;
 };

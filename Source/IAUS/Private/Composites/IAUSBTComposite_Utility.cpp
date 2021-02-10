@@ -1,15 +1,12 @@
-// Copyright 2017-2020 Project Borealis
+// Copyright Project Borealis. All rights reserved.
 
 #include "IAUS/Public/Composites/IAUSBTComposite_Utility.h"
-#include "IAUS/Public/Composites/IAUSBTComposite_Behavior.h"
 
-#include "IAUS/Public/Decorators/IAUSBTDecorator_Consideration.h"
-#include "IAUSEvaluator.h"
-
-#include "AIController.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Object.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Perception/AIPerceptionComponent.h"
+
+#include "IAUS/Public/Composites/IAUSBTComposite_Behavior.h"
+#include "IAUS/Public/Decorators/IAUSBTDecorator_Consideration.h"
 
 UIAUSBTComposite_Utility::UIAUSBTComposite_Utility(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -72,11 +69,18 @@ int32 UIAUSBTComposite_Utility::GetNextChildHandler(FBehaviorTreeSearchData& Sea
 	int32 NextChildIdx = BTSpecialChild::ReturnToParent;
 
 	AActor* TargetActor = nullptr;
-	if (Memory->Context.TotalScore != 0)
+
+	// If the last behavior failed and is the same as the next, return to parent to prevent an infinite loop
+	if (!Memory->LastBehaviorFailed || PrevChild != Memory->Context.BehaviorIndex || LastResult != EBTNodeResult::Failed)
 	{
-		NextChildIdx = Memory->Context.BehaviorIndex;
-		TargetActor = Memory->Context.Actor;
+		if (Memory->Context.TotalScore != 0)
+		{
+			NextChildIdx = Memory->Context.BehaviorIndex;
+			TargetActor = Memory->Context.Actor;
+		}
 	}
+
+	Memory->LastBehaviorFailed = (LastResult == EBTNodeResult::Failed);
 
 	SearchData.OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Object>(BlackboardTargetKey.GetSelectedKeyID(), TargetActor);
 	if (TargetActor)
