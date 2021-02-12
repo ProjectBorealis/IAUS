@@ -9,6 +9,9 @@
 #include "BehaviorTree/BTCompositeNode.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Perception/AIPerceptionComponent.h"
+#include "ProjectBorealis/ProjectBorealis.h"
+
+DEFINE_LOG_CATEGORY(LogPBAI);
 
 UIAUSBTDecorator_Utility::UIAUSBTDecorator_Utility(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -87,6 +90,13 @@ void UIAUSBTDecorator_Utility::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 
 		// Set last behavior time for inertia check
 		DecoratorMemory->ParentMemory->LastBehaviorChangeTime = GetWorld()->GetTimeSeconds();
-		DecoratorMemory->ParentMemory->OwnerComp->RequestExecution(EBTNodeResult::Failed);
+		if (DecoratorMemory->ParentMemory->OwnerComp.IsValid())
+		{
+			DecoratorMemory->ParentMemory->OwnerComp->RequestExecution(EBTNodeResult::Failed);
+		}
+		else
+		{
+			UE_LOG(LogPBAI, Warning, TEXT("Behavior Tree Component pointer is not valid for the request execution call."));
+		}
 	}
 }
