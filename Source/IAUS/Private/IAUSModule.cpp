@@ -3,12 +3,16 @@
 #include "IAUSModule.h"
 
 #include "DetailCustomizations/IAUSBTDecorator_ConsiderationDetails.h"
+#include "IAUS/IAUSCommon.h"
 
 #if WITH_EDITOR
 #include "Editor/PropertyEditor/Public/PropertyEditorModule.h"
 #endif
 
 #define LOCTEXT_NAMESPACE "FIAUSModule"
+
+// Log categories
+DEFINE_LOG_CATEGORY(LogIAUS);
 
 void FIAUSModule::StartupModule()
 {
