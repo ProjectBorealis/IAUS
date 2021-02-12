@@ -8,10 +8,10 @@
 #include "AIController.h"
 #include "BehaviorTree/BTCompositeNode.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "IAUS/IAUSCommon.h"
 #include "Perception/AIPerceptionComponent.h"
-#include "ProjectBorealis/ProjectBorealis.h"
 
-DEFINE_LOG_CATEGORY(LogPBAI);
+DEFINE_LOG_CATEGORY(LogIAUS);
 
 UIAUSBTDecorator_Utility::UIAUSBTDecorator_Utility(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -96,7 +96,7 @@ void UIAUSBTDecorator_Utility::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		}
 		else
 		{
-			UE_LOG(LogPBAI, Warning, TEXT("Behavior Tree Component pointer is not valid for the request execution call."));
+			UE_LOG(LogIAUS, Warning, TEXT("Behavior Tree Component pointer is not valid for the request execution call."));
 		}
 	}
 }
