@@ -11,6 +11,8 @@
 #include "IAUS/IAUSCommon.h"
 #include "Perception/AIPerceptionComponent.h"
 
+DEFINE_LOG_CATEGORY(LogIAUS);
+
 UIAUSBTDecorator_Utility::UIAUSBTDecorator_Utility(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	NodeName = "Utility Ticker";
