@@ -6,6 +6,10 @@
 #include "GameFramework/Character.h"
 
 #include "Decorators/IAUSBTDecorator_Consideration.h"
+#include "IAUS/IAUSCommon.h"
+#include "Stats/Stats.h"
+
+DECLARE_CYCLE_STAT(TEXT("IAUS Choose Behavior"), STAT_IAUSChooseBehavior, STATGROUP_IAUS);
 
 void IAUSEvaluator::AddBehavior(const FIAUSBehavior& Behavior, const FString& Name)
 {
@@ -15,6 +19,7 @@ void IAUSEvaluator::AddBehavior(const FIAUSBehavior& Behavior, const FString& Na
 
 FIAUSBehaviorContext IAUSEvaluator::ChooseBehavior(AAIController* Controller, const TArray<AActor*> Targets)
 {
+	SCOPE_CYCLE_COUNTER(STAT_IAUSChooseBehavior);
 	FIAUSBehaviorContext BestContext = {};
 	BestContext.TotalScore = 0;
 

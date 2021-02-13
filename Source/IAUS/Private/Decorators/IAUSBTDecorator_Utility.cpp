@@ -11,6 +11,8 @@
 #include "IAUS/IAUSCommon.h"
 #include "Perception/AIPerceptionComponent.h"
 
+DECLARE_CYCLE_STAT(TEXT("IAUS Decorator Tick Node"), STAT_IAUSDecoratorTickNode, STATGROUP_IAUS);
+
 UIAUSBTDecorator_Utility::UIAUSBTDecorator_Utility(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	NodeName = "Utility Ticker";
@@ -47,6 +49,7 @@ bool UIAUSBTDecorator_Utility::CalculateRawConditionValue(UBehaviorTreeComponent
 
 void UIAUSBTDecorator_Utility::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
+	SCOPE_CYCLE_COUNTER(STAT_IAUSDecoratorTickNode);
 	FIAUSBTUtilityDecoratorMemory* DecoratorMemory = reinterpret_cast<FIAUSBTUtilityDecoratorMemory*>(NodeMemory);
 	if (DecoratorMemory->ParentMemory == nullptr)
 	{
