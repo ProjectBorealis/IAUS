@@ -12,7 +12,7 @@ public class IAUS : ModuleRules
 		PrecompileForTargets = PrecompileTargetsType.Any;
 
 		PublicDependencyModuleNames.AddRange(
-			new [] {
+			new[] {
 				"Core",
 				"CoreUObject",
 				"Engine",
@@ -24,7 +24,7 @@ public class IAUS : ModuleRules
 		if (Target.Type == TargetRules.TargetType.Editor)
 		{
 			PublicDependencyModuleNames.AddRange(
-				new [] {
+				new[] {
 					"Slate",
 					"SlateCore",
 					"EditorStyle",
