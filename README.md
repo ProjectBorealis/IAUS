@@ -5,6 +5,19 @@
 
 Infinite axis utility system for UE4 Behavior Trees.
 
+# Usage
+
+See [the wiki](https://github.com/ProjectBorealis/IAUS/wiki) for usage. Contributions welcome!
+
+# Contributing
+
+We welcome any PRs to improve the plugin for a variety of use cases.
+
+# Resources
+
+* [Curvature wiki](https://github.com/apoch/curvature/wiki) - For learning more about Utility theory
+* [Dave Mark's blog](http://intrinsicalgorithm.com/IAonAI/) - The original resource for Utility theory, in Guild Wars 2
+
 # Credits
 
 * [Arran Walker](https://github.com/saracen), a former Project Borealis team member
