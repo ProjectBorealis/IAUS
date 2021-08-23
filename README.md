@@ -11,7 +11,7 @@ See [the wiki](https://github.com/ProjectBorealis/IAUS/wiki) for usage. Contribu
 
 # Contributing
 
-We welcome any PRs to improve the plugin for a variety of use cases.
+We welcome any PRs to improve the plugin for a variety of use cases. Feel free to submit any bug/typo fixes, performance optimizations or new features!
 
 # Resources
 
