@@ -1,0 +1,23 @@
+{
+	"FileVersion": 3,
+	"Version": 2,
+	"VersionName": "1.3",
+	"FriendlyName": "IAUS",
+	"Description": "",
+	"Category": "AI",
+	"CreatedBy": "Project Borealis",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "IAUS",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
