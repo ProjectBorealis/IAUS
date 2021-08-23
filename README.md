@@ -20,4 +20,4 @@ We welcome any PRs to improve the plugin for a variety of use cases. Feel free t
 
 # Credits
 
-* [Arran Walker](https://github.com/saracen), a former Project Borealis team member
+* [Arran Walker](https://github.com/saracen), a former Project Borealis team member, for creating the initial plugin
