@@ -1,20 +1,26 @@
-// Copyright 2017-2019 Project Borealis
+// Copyright Project Borealis. All rights reserved.
 
 #pragma once
 
-#include "BehaviorTree/Composites/BTComposite_Selector.h"
 #include "CoreMinimal.h"
+
+#include "BehaviorTree/Composites/BTComposite_Selector.h"
+
 #include "IAUSBTComposite_Behavior.generated.h"
 
-/**
- *
- */
+struct FIAUSBTCompositeBehaviorMemory : public FBTCompositeMemory
+{
+	bool bExecuting = false;
+};
+
 UCLASS()
 class IAUS_API UIAUSBTComposite_Behavior : public UBTComposite_Selector
 {
 	GENERATED_BODY()
 
 public:
+	UIAUSBTComposite_Behavior(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
 	UPROPERTY(EditAnywhere, Category = "Utility")
 	bool bTargetSelf = false;
 
@@ -27,32 +33,20 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Utility")
 	bool bTargetHostile = true;
 
+	UPROPERTY(EditAnywhere, Category = "Utility")
+	bool bInterruptible = true;
+
 	UPROPERTY(EditAnywhere, Category = "Utility", meta = (ClampMin = "0.0", ClampMax = "100.0", UIMin = "0.0", UIMax = "100.0"))
 	float InitialWeight = 1.0;
 
 #if WITH_EDITOR
-	FString GetStaticDescription() const override
-	{
-		FString TargetDesc;
-
-		if (bTargetSelf)
-		{
-			TargetDesc.Append("Target Self\n");
-		}
-		if (bTargetFriendly)
-		{
-			TargetDesc.Append("Target Friendly\n");
-		}
-		if (bTargetNeutral)
-		{
-			TargetDesc.Append("Target Neutral\n");
-		}
-		if (bTargetHostile)
-		{
-			TargetDesc.Append("Target Hostile\n");
-		}
-
-		return FString::Printf(TEXT("%s\n%s\nInitial Weight: %f"), *Super::GetStaticDescription(), *TargetDesc, InitialWeight);
-	}
+	FString GetStaticDescription() const override;
 #endif
+
+protected:
+	virtual void NotifyNodeActivation(FBehaviorTreeSearchData& SearchData) const override;
+
+	virtual void NotifyNodeDeactivation(FBehaviorTreeSearchData& SearchData, EBTNodeResult::Type& NodeResult) const override;
+
+	virtual uint16 GetInstanceMemorySize() const override;
 };

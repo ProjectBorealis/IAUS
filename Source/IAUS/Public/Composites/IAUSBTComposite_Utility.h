@@ -15,22 +15,20 @@ struct FIAUSBTCompositeUtilityMemory : public FBTCompositeMemory
 	IAUSEvaluator Evaluator;
 	FIAUSBehaviorContext Context;
 	float LastBehaviorChangeTime;
+	TArray<struct FIAUSBTCompositeBehaviorMemory*> BehaviorMemories;
 
 	TWeakObjectPtr<UBehaviorTreeComponent> OwnerComp;
 };
 
-/**
- *
- */
 UCLASS()
 class IAUS_API UIAUSBTComposite_Utility : public UBTCompositeNode
 {
-	GENERATED_UCLASS_BODY()
+	GENERATED_BODY()
 
-	/** initialize any asset related data */
+public:
+	UIAUSBTComposite_Utility(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
 	virtual void InitializeFromAsset(UBehaviorTree& Asset) override;
-
-	FName GetSelectedBlackboardKey() const;
 
 protected:
 	/* Primary Target Enemy */
@@ -44,10 +42,6 @@ protected:
 	virtual int32 GetNextChildHandler(struct FBehaviorTreeSearchData& SearchData, int32 PrevChild, EBTNodeResult::Type LastResult) const override;
 
 	virtual uint16 GetInstanceMemorySize() const override;
+
 	virtual void InitializeMemory(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTMemoryInit::Type InitType) const override;
 };
-
-FORCEINLINE FName UIAUSBTComposite_Utility::GetSelectedBlackboardKey() const
-{
-	return BlackboardTargetKey.SelectedKeyName;
-}

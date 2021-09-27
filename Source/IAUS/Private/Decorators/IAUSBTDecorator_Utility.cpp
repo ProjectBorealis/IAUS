@@ -1,56 +1,33 @@
-// Copyright 2017-2020 Project Borealis
+// Copyright Project Borealis. All rights reserved.
 
-#include "IAUS/Public/Decorators/IAUSBTDecorator_Utility.h"
-
-#include "IAUS/Public/Composites/IAUSBTComposite_Utility.h"
-#include "IAUS/Public/Decorators/IAUSBTDecorator_Consideration.h"
+#include "Decorators/IAUSBTDecorator_Utility.h"
 
 #include "AIController.h"
-#include "BehaviorTree/BTCompositeNode.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "IAUS/IAUSCommon.h"
 #include "Perception/AIPerceptionComponent.h"
+
+#include "Composites/IAUSBTComposite_Behavior.h"
+#include "Composites/IAUSBTComposite_Utility.h"
+#include "Decorators/IAUSBTDecorator_Consideration.h"
+#include "IAUS/IAUSCommon.h"
 
 DECLARE_CYCLE_STAT(TEXT("IAUS Decorator Tick Node"), STAT_IAUSDecoratorTickNode, STATGROUP_IAUS);
 
-UIAUSBTDecorator_Utility::UIAUSBTDecorator_Utility(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+UIAUSBTDecorator_Utility::UIAUSBTDecorator_Utility(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/) : Super(ObjectInitializer)
 {
-	NodeName = "Utility Ticker";
+	NodeName = TEXT("Utility Ticker");
 
 	bNotifyTick = true;
 	bNotifyActivation = true;
 
-	IntertiaWeight = 1.0f;
-}
-
-void UIAUSBTDecorator_Utility::OnNodeActivation(FBehaviorTreeSearchData& SearchData)
-{
-	const UIAUSBTComposite_Utility* Parent = Cast<const UIAUSBTComposite_Utility>(this->GetMyNode());
-	if (Parent == nullptr)
-	{
-		return;
-	}
-
-	FIAUSBTUtilityDecoratorMemory* DecoratorMemory = GetNodeMemory<FIAUSBTUtilityDecoratorMemory>(SearchData);
-	DecoratorMemory->ParentMemory = Parent->GetNodeMemory<FIAUSBTCompositeUtilityMemory>(SearchData);
-}
-
-uint16 UIAUSBTDecorator_Utility::GetInstanceMemorySize() const
-{
-	return sizeof(FIAUSBTUtilityDecoratorMemory);
-}
-
-bool UIAUSBTDecorator_Utility::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
-{
-	FIAUSBTUtilityDecoratorMemory* DecoratorMemory = reinterpret_cast<FIAUSBTUtilityDecoratorMemory*>(NodeMemory);
-
-	return !DecoratorMemory->IsInvalid;
+	SelectionCooldown = 0.25f;
 }
 
 void UIAUSBTDecorator_Utility::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	SCOPE_CYCLE_COUNTER(STAT_IAUSDecoratorTickNode);
-	FIAUSBTUtilityDecoratorMemory* DecoratorMemory = reinterpret_cast<FIAUSBTUtilityDecoratorMemory*>(NodeMemory);
+
+	FIAUSBTUtilityDecoratorMemory* DecoratorMemory = CastInstanceNodeMemory<FIAUSBTUtilityDecoratorMemory>(NodeMemory);
 	if (DecoratorMemory->ParentMemory == nullptr)
 	{
 		return;
@@ -62,8 +39,7 @@ void UIAUSBTDecorator_Utility::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		return;
 	}
 
-	// Intertia check - Give behavior a moment to stabilize before we start looking for other things to do
-	if ((DecoratorMemory->ParentMemory->LastBehaviorChangeTime + IntertiaWeight) >= GetWorld()->GetTimeSeconds())
+	if ((DecoratorMemory->ParentMemory->LastBehaviorChangeTime + SelectionCooldown) >= GetWorld()->GetTimeSeconds())
 	{
 		return;
 	}
@@ -88,9 +64,8 @@ void UIAUSBTDecorator_Utility::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		CurrentActor != DecoratorMemory->ParentMemory->Context.Actor)
 	{
 		DecoratorMemory->ParentMemory->Evaluator.Behaviors[DecoratorMemory->ParentMemory->Context.BehaviorIndex].LastExecutionTime = GetWorld()->GetTimeSeconds();
-
-		// Set last behavior time for inertia check
 		DecoratorMemory->ParentMemory->LastBehaviorChangeTime = GetWorld()->GetTimeSeconds();
+
 		if (DecoratorMemory->ParentMemory->OwnerComp.IsValid())
 		{
 			DecoratorMemory->ParentMemory->OwnerComp->RequestExecution(EBTNodeResult::Failed);
@@ -100,4 +75,40 @@ void UIAUSBTDecorator_Utility::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 			UE_LOG(LogIAUS, Warning, TEXT("Behavior Tree Component pointer is not valid for the request execution call."));
 		}
 	}
+}
+
+void UIAUSBTDecorator_Utility::OnNodeActivation(FBehaviorTreeSearchData& SearchData)
+{
+	const UIAUSBTComposite_Utility* UtilityComposite = Cast<UIAUSBTComposite_Utility>(GetMyNode());
+	if (!UtilityComposite)
+	{
+		return;
+	}
+
+	if (FIAUSBTUtilityDecoratorMemory* MyMemory = GetNodeMemory<FIAUSBTUtilityDecoratorMemory>(SearchData))
+	{
+		if (FIAUSBTCompositeUtilityMemory* UtilityCompositeMemory = MyMemory->ParentMemory = UtilityComposite->GetNodeMemory<FIAUSBTCompositeUtilityMemory>(SearchData))
+		{
+			UtilityCompositeMemory->BehaviorMemories.Empty();
+
+			for (int32 Idx = 0; Idx < UtilityComposite->Children.Num(); Idx++)
+			{
+				if (const UIAUSBTComposite_Behavior* BehaviorComposite = Cast<UIAUSBTComposite_Behavior>(UtilityComposite->Children[Idx].ChildComposite))
+				{
+					UtilityCompositeMemory->BehaviorMemories.Add(BehaviorComposite->GetNodeMemory<FIAUSBTCompositeBehaviorMemory>(SearchData));
+				}
+			}
+		}
+	}
+}
+bool UIAUSBTDecorator_Utility::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
+{
+	FIAUSBTUtilityDecoratorMemory* DecoratorMemory = CastInstanceNodeMemory<FIAUSBTUtilityDecoratorMemory>(NodeMemory);
+
+	return !DecoratorMemory->IsInvalid;
+}
+
+uint16 UIAUSBTDecorator_Utility::GetInstanceMemorySize() const
+{
+	return sizeof(FIAUSBTUtilityDecoratorMemory);
 }

@@ -2,22 +2,21 @@
 
 #include "IAUS/Public/Composites/IAUSBTComposite_Utility.h"
 
-#include "BehaviorTree/Blackboard/BlackboardKeyType_Object.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 #include "IAUS/Public/Composites/IAUSBTComposite_Behavior.h"
 #include "IAUS/Public/Decorators/IAUSBTDecorator_Consideration.h"
 
-UIAUSBTComposite_Utility::UIAUSBTComposite_Utility(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+UIAUSBTComposite_Utility::UIAUSBTComposite_Utility(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/) : Super(ObjectInitializer)
 {
-	NodeName = "Utility";
+	NodeName = TEXT("Utility");
 }
 
 void UIAUSBTComposite_Utility::InitializeMemory(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTMemoryInit::Type InitType) const
 {
 	if (InitType == EBTMemoryInit::Initialize)
 	{
-		FIAUSBTCompositeUtilityMemory* Memory = reinterpret_cast<FIAUSBTCompositeUtilityMemory*>(NodeMemory);
+		FIAUSBTCompositeUtilityMemory* Memory = CastInstanceNodeMemory<FIAUSBTCompositeUtilityMemory>(NodeMemory);
 		Memory->OwnerComp = &OwnerComp;
 
 		for (int32 Idx = 0; Idx < GetChildrenNum(); ++Idx)
@@ -64,23 +63,24 @@ void UIAUSBTComposite_Utility::InitializeFromAsset(UBehaviorTree& Asset)
 int32 UIAUSBTComposite_Utility::GetNextChildHandler(FBehaviorTreeSearchData& SearchData, int32 PrevChild, EBTNodeResult::Type LastResult) const
 {
 	FIAUSBTCompositeUtilityMemory* Memory = GetNodeMemory<FIAUSBTCompositeUtilityMemory>(SearchData);
-
-	// success = quit
 	int32 NextChildIdx = BTSpecialChild::ReturnToParent;
-
 	AActor* TargetActor = nullptr;
+	const int32 CurrentBehaviorIndex = Memory->Context.BehaviorIndex;
+	const UIAUSBTComposite_Behavior* CurrentBehavior = Cast<UIAUSBTComposite_Behavior>(Children[CurrentBehaviorIndex].ChildComposite);
+	const FIAUSBTCompositeBehaviorMemory* CurrentBehaviorMemory = Memory->BehaviorMemories[CurrentBehaviorIndex];
 
-	// If the last behavior failed and is the same as the next, return to parent to prevent an infinite loop
-	if (LastResult != EBTNodeResult::Failed || PrevChild != Memory->Context.BehaviorIndex)
+	// Reasons why the current behavior may not be valid for execution:
+	// - It's the same as the previous and it's non-interruptible.
+	// - It's the same as the previous behavior and it already failed to execute.
+	// - Its score is 0.
+	if ((PrevChild != CurrentBehaviorIndex || !CurrentBehavior || CurrentBehavior->bInterruptible) &&
+		(PrevChild != CurrentBehaviorIndex || LastResult != EBTNodeResult::Failed) && (Memory->Context.TotalScore != 0))
 	{
-		if (Memory->Context.TotalScore != 0)
-		{
-			NextChildIdx = Memory->Context.BehaviorIndex;
-			TargetActor = Memory->Context.Actor;
-		}
+		NextChildIdx = Memory->Context.BehaviorIndex;
+		TargetActor = Memory->Context.Actor;
 	}
 
-	SearchData.OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Object>(BlackboardTargetKey.GetSelectedKeyID(), TargetActor);
+	SearchData.OwnerComp.GetBlackboardComponent()->SetValueAsObject(BlackboardTargetKey.SelectedKeyName, TargetActor);
 	if (TargetActor)
 	{
 		SearchData.OwnerComp.GetBlackboardComponent()->SetValueAsVector(BlackboardLKPKey.SelectedKeyName, TargetActor->GetActorLocation());
