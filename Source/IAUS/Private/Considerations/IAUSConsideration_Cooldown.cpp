@@ -14,25 +14,25 @@ UIAUSConsideration_Cooldown::UIAUSConsideration_Cooldown()
 
 float UIAUSConsideration_Cooldown::Score(const FIAUSBehaviorContext& Context) const
 {
-	FString Name = Node.ToString();
-	if (Node == NAME_None || Name.Len() == 0)
+	if (Node.IsNone())
 	{
 		return 0;
 	}
 
+	const FString& Name = Node.ToString();
 	if (!Context.Evaluator->BehaviorNameIndex.Contains(Name))
 	{
 		return 0;
 	}
 
-	int32 Index = Context.Evaluator->BehaviorNameIndex[Node.ToString()];
+	const int32 Index = Context.Evaluator->BehaviorNameIndex[Name];
 
 	if (Context.Evaluator->Behaviors[Index].LastExecutionTime == 0)
 	{
 		return ResponseCurve->ComputeValue(1);
 	}
 
-	float Seconds = GetWorld()->GetTimeSeconds() - Context.Evaluator->Behaviors[Index].LastExecutionTime;
+	const float Seconds = GetWorld()->GetTimeSeconds() - Context.Evaluator->Behaviors[Index].LastExecutionTime;
 
 	return ResponseCurve->ComputeValue(Seconds / CoolDownTime);
 }
