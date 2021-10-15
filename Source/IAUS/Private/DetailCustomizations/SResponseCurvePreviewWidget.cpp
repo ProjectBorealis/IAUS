@@ -50,8 +50,9 @@ int32 SResponseCurvePreviewWidget::OnPaint(const FPaintArgs& Args, const FGeomet
 	// Draw line graph
 	TArray<FVector2D> LinePoints;
 
-	for (float x = 0.0; x <= 1.0; x += 0.001)
+	for (int i = 0; i <= 1000; i++)
 	{
+		float x = i / 1000.0f;
 		float y = ResponseCurve->ComputeValue(x);
 
 		const float XPos = x * AllottedGeometry.Size.X;
