@@ -17,7 +17,7 @@ void IAUSEvaluator::AddBehavior(const FIAUSBehavior& Behavior, const FString& Na
 	BehaviorNameIndex.Add(Name, Index);
 }
 
-FIAUSBehaviorContext IAUSEvaluator::ChooseBehavior(AAIController* Controller, const TArray<AActor*> Targets, bool bSkipTeamAttitudeCheck /*= false*/)
+FIAUSBehaviorContext IAUSEvaluator::ChooseBehavior(AAIController* Controller, const TArray<AActor*> Targets, bool bCheckTeamAttitude /*= true*/)
 {
 	SCOPE_CYCLE_COUNTER(STAT_IAUSChooseBehavior);
 	FIAUSBehaviorContext BestContext = {};
@@ -34,7 +34,7 @@ FIAUSBehaviorContext IAUSEvaluator::ChooseBehavior(AAIController* Controller, co
 					continue;
 				}
 			}
-			else if (!bSkipTeamAttitudeCheck)
+			else if (bCheckTeamAttitude)
 			{
 				ETeamAttitude::Type Attitude = Controller->GetTeamAttitudeTowards(*Actor);
 				if ((Attitude == ETeamAttitude::Friendly && !Behaviors[Idx].bTargetFriendly) ||

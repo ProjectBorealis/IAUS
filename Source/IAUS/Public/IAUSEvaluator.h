@@ -36,5 +36,5 @@ public:
 	TMap<FString, int32> BehaviorNameIndex;
 
 	void AddBehavior(const FIAUSBehavior& Behavior, const FString& Name);
-	FIAUSBehaviorContext ChooseBehavior(class AAIController* Controller, const TArray<class AActor*> Targets, bool bSkipTeamAttitudeCheck = false);
+	FIAUSBehaviorContext ChooseBehavior(class AAIController* Controller, const TArray<class AActor*> Targets, bool bCheckTeamAttitude = true);
 };

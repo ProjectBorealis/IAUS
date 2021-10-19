@@ -51,7 +51,7 @@ void UIAUSBTDecorator_Utility::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	Controller->GetPerceptionComponent()->GetKnownPerceivedActors(nullptr, Targets);
 	Targets.Add(Controller->GetPawn());
 
-	DecoratorMemory->ParentMemory->Context = DecoratorMemory->ParentMemory->Evaluator.ChooseBehavior(Controller, Targets, false);
+	DecoratorMemory->ParentMemory->Context = DecoratorMemory->ParentMemory->Evaluator.ChooseBehavior(Controller, Targets);
 
 	if (DecoratorMemory->ParentMemory->Context.TotalScore == 0)
 	{
