@@ -16,8 +16,6 @@ struct FIAUSBTCompositeUtilityMemory : public FBTCompositeMemory
 	FIAUSBehaviorContext Context;
 	float LastBehaviorChangeTime;
 	TArray<struct FIAUSBTCompositeBehaviorMemory*> BehaviorMemories;
-
-	TWeakObjectPtr<UBehaviorTreeComponent> OwnerComp;
 };
 
 UCLASS()

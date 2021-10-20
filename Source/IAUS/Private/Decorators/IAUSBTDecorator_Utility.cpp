@@ -133,14 +133,7 @@ void UIAUSBTDecorator_Utility::SelectBehavior(UBehaviorTreeComponent& OwnerComp,
 	{
 		UtilityCompositeMemory->LastBehaviorChangeTime = GetWorld()->GetTimeSeconds();
 
-		if (UtilityCompositeMemory->OwnerComp.IsValid())
-		{
-			UtilityCompositeMemory->OwnerComp->RequestExecution(EBTNodeResult::Failed);
-		}
-		else
-		{
-			UE_LOG(LogIAUS, Warning, TEXT("Behavior Tree Component pointer is not valid for the request execution call."));
-		}
+		OwnerComp.RequestExecution(EBTNodeResult::Failed);
 	}
 }
 

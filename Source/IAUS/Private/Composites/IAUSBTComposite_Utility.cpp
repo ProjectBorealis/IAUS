@@ -17,7 +17,6 @@ void UIAUSBTComposite_Utility::InitializeMemory(UBehaviorTreeComponent& OwnerCom
 	if (InitType == EBTMemoryInit::Initialize)
 	{
 		FIAUSBTCompositeUtilityMemory* Memory = CastInstanceNodeMemory<FIAUSBTCompositeUtilityMemory>(NodeMemory);
-		Memory->OwnerComp = &OwnerComp;
 
 		for (int32 Idx = 0; Idx < GetChildrenNum(); ++Idx)
 		{
@@ -67,7 +66,6 @@ int32 UIAUSBTComposite_Utility::GetNextChildHandler(FBehaviorTreeSearchData& Sea
 	AActor* TargetActor = nullptr;
 	const int32 CurrentBehaviorIndex = Memory->Context.BehaviorIndex;
 	const UIAUSBTComposite_Behavior* CurrentBehavior = Cast<UIAUSBTComposite_Behavior>(Children[CurrentBehaviorIndex].ChildComposite);
-	const FIAUSBTCompositeBehaviorMemory* CurrentBehaviorMemory = Memory->BehaviorMemories[CurrentBehaviorIndex];
 
 	// Reasons why the current behavior may not be valid for execution:
 	// - It's the same as the previous and it's non-interruptible.
