@@ -27,54 +27,37 @@ void UIAUSBTDecorator_Utility::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 {
 	SCOPE_CYCLE_COUNTER(STAT_IAUSDecoratorTickNode);
 
-	FIAUSBTUtilityDecoratorMemory* DecoratorMemory = CastInstanceNodeMemory<FIAUSBTUtilityDecoratorMemory>(NodeMemory);
-	if (DecoratorMemory->ParentMemory == nullptr)
+	FIAUSBTUtilityDecoratorMemory* UtilityDecoratorMemory = CastInstanceNodeMemory<FIAUSBTUtilityDecoratorMemory>(NodeMemory);
+	if (!UtilityDecoratorMemory || !UtilityDecoratorMemory->ParentMemory)
 	{
 		return;
 	}
 
-	AAIController* Controller = OwnerComp.GetAIOwner();
-	if (Controller == nullptr)
+	FIAUSBTCompositeUtilityMemory* UtilityCompositeMemory = UtilityDecoratorMemory->ParentMemory;
+
+	// Give behavior a moment to stabilize before we start looking for other things to do
+	if (UtilityCompositeMemory->LastBehaviorChangeTime + SelectionCooldown >= GetWorld()->GetTimeSeconds())
 	{
 		return;
 	}
 
-	if ((DecoratorMemory->ParentMemory->LastBehaviorChangeTime + SelectionCooldown) >= GetWorld()->GetTimeSeconds())
+	const int32 CurrentBehaviorIndex = UtilityCompositeMemory->Context.BehaviorIndex;
+
+	if (const UIAUSBTComposite_Utility* UtilityComposite = Cast<UIAUSBTComposite_Utility>(GetMyNode()))
 	{
-		return;
-	}
-
-	// Track current Context actor for later comparison
-	AActor* CurrentActor = DecoratorMemory->ParentMemory->Context.Actor;
-
-	TArray<AActor*> Targets;
-	Controller->GetPerceptionComponent()->GetKnownPerceivedActors(nullptr, Targets);
-	Targets.Add(Controller->GetPawn());
-
-	DecoratorMemory->ParentMemory->Context = DecoratorMemory->ParentMemory->Evaluator.ChooseBehavior(Controller, Targets);
-
-	if (DecoratorMemory->ParentMemory->Context.TotalScore == 0)
-	{
-		DecoratorMemory->IsInvalid = true;
-		return;
-	}
-
-	DecoratorMemory->IsInvalid = false;
-	if (DecoratorMemory->ParentMemory->Context.BehaviorIndex != static_cast<int32>(DecoratorMemory->ParentMemory->CurrentChild) ||
-		CurrentActor != DecoratorMemory->ParentMemory->Context.Actor)
-	{
-		DecoratorMemory->ParentMemory->Evaluator.Behaviors[DecoratorMemory->ParentMemory->Context.BehaviorIndex].LastExecutionTime = GetWorld()->GetTimeSeconds();
-		DecoratorMemory->ParentMemory->LastBehaviorChangeTime = GetWorld()->GetTimeSeconds();
-
-		if (DecoratorMemory->ParentMemory->OwnerComp.IsValid())
+		if (const UIAUSBTComposite_Behavior* CurrentBehaviorComposite = Cast<UIAUSBTComposite_Behavior>(UtilityComposite->Children[CurrentBehaviorIndex].ChildComposite))
 		{
-			DecoratorMemory->ParentMemory->OwnerComp->RequestExecution(EBTNodeResult::Failed);
-		}
-		else
-		{
-			UE_LOG(LogIAUS, Warning, TEXT("Behavior Tree Component pointer is not valid for the request execution call."));
+			if (!CurrentBehaviorComposite->bInterruptible)
+			{
+				if (UtilityCompositeMemory->BehaviorMemories[CurrentBehaviorIndex]->bExecuting)
+				{
+					return;
+				}
+			}
 		}
 	}
+
+	SelectBehavior(OwnerComp, NodeMemory);
 }
 
 void UIAUSBTDecorator_Utility::OnNodeActivation(FBehaviorTreeSearchData& SearchData)
@@ -101,6 +84,7 @@ void UIAUSBTDecorator_Utility::OnNodeActivation(FBehaviorTreeSearchData& SearchD
 		}
 	}
 }
+
 bool UIAUSBTDecorator_Utility::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
 {
 	FIAUSBTUtilityDecoratorMemory* DecoratorMemory = CastInstanceNodeMemory<FIAUSBTUtilityDecoratorMemory>(NodeMemory);
@@ -111,4 +95,63 @@ bool UIAUSBTDecorator_Utility::CalculateRawConditionValue(UBehaviorTreeComponent
 uint16 UIAUSBTDecorator_Utility::GetInstanceMemorySize() const
 {
 	return sizeof(FIAUSBTUtilityDecoratorMemory);
+}
+
+void UIAUSBTDecorator_Utility::OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+{
+	Super::OnBecomeRelevant(OwnerComp, NodeMemory);
+
+	SelectBehavior(OwnerComp, NodeMemory);
+}
+
+void UIAUSBTDecorator_Utility::SelectBehavior(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
+{
+	FIAUSBTUtilityDecoratorMemory* UtilityDecoratorMemory = CastInstanceNodeMemory<FIAUSBTUtilityDecoratorMemory>(NodeMemory);
+	if (!UtilityDecoratorMemory || !UtilityDecoratorMemory->ParentMemory || !OwnerComp.GetAIOwner())
+	{
+		return;
+	}
+
+	FIAUSBTCompositeUtilityMemory* UtilityCompositeMemory = UtilityDecoratorMemory->ParentMemory;
+	int32 CurrentBehaviorIndex = UtilityCompositeMemory->Context.BehaviorIndex;
+	const AActor* CurrentActor = UtilityCompositeMemory->Context.Actor;
+
+	UpdateBehaviorContext(OwnerComp, UtilityCompositeMemory);
+
+	if (UtilityCompositeMemory->Context.TotalScore == 0)
+	{
+		UtilityDecoratorMemory->IsInvalid = true;
+		return;
+	}
+
+	UtilityDecoratorMemory->IsInvalid = false;
+
+	CurrentBehaviorIndex = UtilityCompositeMemory->Context.BehaviorIndex;
+	UtilityCompositeMemory->Evaluator.Behaviors[CurrentBehaviorIndex].LastExecutionTime = GetWorld()->GetTimeSeconds();
+
+	if (CurrentBehaviorIndex != static_cast<int32>(UtilityCompositeMemory->CurrentChild) || CurrentActor != UtilityCompositeMemory->Context.Actor)
+	{
+		UtilityCompositeMemory->LastBehaviorChangeTime = GetWorld()->GetTimeSeconds();
+
+		if (UtilityCompositeMemory->OwnerComp.IsValid())
+		{
+			UtilityCompositeMemory->OwnerComp->RequestExecution(EBTNodeResult::Failed);
+		}
+		else
+		{
+			UE_LOG(LogIAUS, Warning, TEXT("Behavior Tree Component pointer is not valid for the request execution call."));
+		}
+	}
+}
+
+void UIAUSBTDecorator_Utility::UpdateBehaviorContext(UBehaviorTreeComponent& OwnerComp, FIAUSBTCompositeUtilityMemory* UtilityCompositeMemory) const
+{
+	if (AAIController* AIController = Cast<AAIController>(OwnerComp.GetAIOwner()))
+	{
+		TArray<AActor*> Targets;
+		AIController->GetPerceptionComponent()->GetKnownPerceivedActors(nullptr, Targets);
+		Targets.Add(AIController->GetPawn());
+
+		UtilityCompositeMemory->Context = UtilityCompositeMemory->Evaluator.ChooseBehavior(AIController, Targets);
+	}
 }
