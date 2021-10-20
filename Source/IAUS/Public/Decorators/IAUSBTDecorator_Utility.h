@@ -8,10 +8,12 @@
 
 #include "IAUSBTDecorator_Utility.generated.h"
 
+struct FIAUSBTCompositeUtilityMemory;
+
 struct FIAUSBTUtilityDecoratorMemory
 {
 	bool IsInvalid;
-	struct FIAUSBTCompositeUtilityMemory* ParentMemory;
+	FIAUSBTCompositeUtilityMemory* ParentMemory;
 };
 
 UCLASS()
@@ -31,7 +33,14 @@ protected:
 
 	virtual uint16 GetInstanceMemorySize() const override;
 
-	/** How often a new behavior be selected can be selected */
+	virtual void OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
+	virtual void SelectBehavior(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const;
+
+	/** Finds the targets, lets the evaluator choose a new behavior, and updates the Context inside the UtilityCompositeMemory */
+	virtual void UpdateBehaviorContext(UBehaviorTreeComponent& OwnerComp, FIAUSBTCompositeUtilityMemory* UtilityCompositeMemory) const;
+
+	/** How often a new behavior can be selected */
 	UPROPERTY(EditAnywhere, Category = Blackboard)
 	float SelectionCooldown;
 };
