@@ -8,12 +8,12 @@
 
 #include "IAUSBTDecorator_Utility.generated.h"
 
-struct FIAUSBTCompositeUtilityMemory;
+struct FIAUSBTComposite_UtilityMemory;
 
-struct FIAUSBTUtilityDecoratorMemory
+struct FIAUSBTDecorator_UtilityMemory
 {
-	bool IsInvalid;
-	FIAUSBTCompositeUtilityMemory* ParentMemory;
+	bool IsContextInvalid;
+	FIAUSBTComposite_UtilityMemory* MemoryUtilityComposite;
 };
 
 UCLASS()
@@ -27,6 +27,7 @@ public:
 protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
+	/** Initializes the memories of all the IAUS nodes */
 	virtual void OnNodeActivation(FBehaviorTreeSearchData& SearchData) override;
 
 	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;
@@ -35,10 +36,10 @@ protected:
 
 	virtual void OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
-	virtual void SelectBehavior(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const;
+	virtual void EvaluateBehaviors(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const;
 
-	/** Finds the targets, lets the evaluator choose a new behavior, and updates the Context inside the UtilityCompositeMemory */
-	virtual void UpdateBehaviorContext(UBehaviorTreeComponent& OwnerComp, FIAUSBTCompositeUtilityMemory* UtilityCompositeMemory) const;
+	/** Finds the targets, lets the evaluator choose a new behavior, and updates the Context inside the MemoryUtilityComposite */
+	virtual void UpdateBehaviorContext(UBehaviorTreeComponent& OwnerComp, FIAUSBTComposite_UtilityMemory* MemoryUtilityComposite) const;
 
 	/** How often a new behavior can be selected */
 	UPROPERTY(EditAnywhere, Category = Blackboard)

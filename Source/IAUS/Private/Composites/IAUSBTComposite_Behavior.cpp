@@ -36,7 +36,7 @@ FString UIAUSBTComposite_Behavior::GetStaticDescription() const
 
 void UIAUSBTComposite_Behavior::NotifyNodeActivation(FBehaviorTreeSearchData& SearchData) const
 {
-	if (FIAUSBTCompositeBehaviorMemory* Memory = GetNodeMemory<FIAUSBTCompositeBehaviorMemory>(SearchData))
+	if (FIAUSBTComposite_BehaviorMemory* Memory = GetNodeMemory<FIAUSBTComposite_BehaviorMemory>(SearchData))
 	{
 		Memory->bExecuting = true;
 	}
@@ -46,7 +46,7 @@ void UIAUSBTComposite_Behavior::NotifyNodeDeactivation(FBehaviorTreeSearchData& 
 {
 	Super::NotifyNodeDeactivation(SearchData, NodeResult);
 
-	if (FIAUSBTCompositeBehaviorMemory* Memory = GetNodeMemory<FIAUSBTCompositeBehaviorMemory>(SearchData))
+	if (FIAUSBTComposite_BehaviorMemory* Memory = GetNodeMemory<FIAUSBTComposite_BehaviorMemory>(SearchData))
 	{
 		Memory->bExecuting = false;
 	}
@@ -54,5 +54,5 @@ void UIAUSBTComposite_Behavior::NotifyNodeDeactivation(FBehaviorTreeSearchData& 
 
 uint16 UIAUSBTComposite_Behavior::GetInstanceMemorySize() const
 {
-	return sizeof(FIAUSBTCompositeBehaviorMemory);
+	return sizeof(FIAUSBTComposite_BehaviorMemory);
 }

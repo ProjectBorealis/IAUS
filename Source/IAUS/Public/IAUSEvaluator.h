@@ -7,7 +7,7 @@
 struct FIAUSBehaviorContext
 {
 	class IAUSEvaluator* Evaluator;
-	class AActor* Actor;
+	class AActor* Target;
 	class AAIController* AIController;
 	float TotalScore;
 	int32 BehaviorIndex;
@@ -33,7 +33,7 @@ class IAUS_API IAUSEvaluator
 {
 public:
 	TArray<FIAUSBehavior> Behaviors;
-	TMap<FString, int32> BehaviorNameIndex;
+	TMap<FString, int32> BehaviorNameIndexMap;
 
 	void AddBehavior(const FIAUSBehavior& Behavior, const FString& Name);
 	FIAUSBehaviorContext ChooseBehavior(class AAIController* Controller, const TArray<class AActor*> Targets, bool bCheckTeamAttitude = true);

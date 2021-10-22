@@ -10,9 +10,6 @@
 
 #include "IAUSBTDecorator_Consideration.generated.h"
 
-/**
- * UCLASS(Abstract, HideCategories = (Condition))
- */
 UCLASS(HideCategories = (Condition))
 class IAUS_API UIAUSBTDecorator_Consideration : public UBTDecorator
 {

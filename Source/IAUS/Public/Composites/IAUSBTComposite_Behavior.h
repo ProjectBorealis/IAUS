@@ -4,17 +4,17 @@
 
 #include "CoreMinimal.h"
 
-#include "BehaviorTree/Composites/BTComposite_Selector.h"
+#include "BehaviorTree/Composites/BTComposite_Sequence.h"
 
 #include "IAUSBTComposite_Behavior.generated.h"
 
-struct FIAUSBTCompositeBehaviorMemory : public FBTCompositeMemory
+struct FIAUSBTComposite_BehaviorMemory : public FBTCompositeMemory
 {
 	bool bExecuting = false;
 };
 
 UCLASS()
-class IAUS_API UIAUSBTComposite_Behavior : public UBTComposite_Selector
+class IAUS_API UIAUSBTComposite_Behavior : public UBTComposite_Sequence
 {
 	GENERATED_BODY()
 
