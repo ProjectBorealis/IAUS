@@ -8,7 +8,7 @@
 
 #include "IAUSBTComposite_Behavior.generated.h"
 
-struct FIAUSBTCompositeBehaviorMemory : public FBTCompositeMemory
+struct FIAUSBTComposite_BehaviorMemory : public FBTCompositeMemory
 {
 	bool bExecuting = false;
 };

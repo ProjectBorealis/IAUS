@@ -14,20 +14,21 @@ DECLARE_CYCLE_STAT(TEXT("IAUS Choose Behavior"), STAT_IAUSChooseBehavior, STATGR
 void IAUSEvaluator::AddBehavior(const FIAUSBehavior& Behavior, const FString& Name)
 {
 	int32 Index = Behaviors.Add(Behavior);
-	BehaviorNameIndex.Add(Name, Index);
+	BehaviorNameIndexMap.Add(Name, Index);
 }
 
-FIAUSBehaviorContext IAUSEvaluator::ChooseBehavior(AAIController* Controller, const TArray<AActor*> Targets, bool bCheckTeamAttitude /*= true*/)
+FIAUSBehaviorContext IAUSEvaluator::ChooseBehavior(AAIController* AIController, const TArray<AActor*> Targets, bool bCheckTeamAttitude /*= true*/)
 {
 	SCOPE_CYCLE_COUNTER(STAT_IAUSChooseBehavior);
+
 	FIAUSBehaviorContext BestContext = {};
 	BestContext.TotalScore = 0;
 
 	for (int32 Idx = 0; Idx < Behaviors.Num(); Idx++)
 	{
-		for (AActor* Actor : Targets)
+		for (AActor* Target : Targets)
 		{
-			if (Controller->GetPawn() == Actor)
+			if (AIController->GetPawn() == Target)
 			{
 				if (!Behaviors[Idx].bTargetSelf)
 				{
@@ -36,7 +37,7 @@ FIAUSBehaviorContext IAUSEvaluator::ChooseBehavior(AAIController* Controller, co
 			}
 			else if (bCheckTeamAttitude)
 			{
-				ETeamAttitude::Type Attitude = Controller->GetTeamAttitudeTowards(*Actor);
+				ETeamAttitude::Type Attitude = AIController->GetTeamAttitudeTowards(*Target);
 				if ((Attitude == ETeamAttitude::Friendly && !Behaviors[Idx].bTargetFriendly) ||
 					(Attitude == ETeamAttitude::Neutral && !Behaviors[Idx].bTargetNeutral) || (Attitude == ETeamAttitude::Hostile && !Behaviors[Idx].bTargetHostile))
 				{
@@ -47,8 +48,8 @@ FIAUSBehaviorContext IAUSEvaluator::ChooseBehavior(AAIController* Controller, co
 			FIAUSBehaviorContext Context;
 			Context.Evaluator = this;
 			Context.BehaviorIndex = Idx;
-			Context.AIController = Controller;
-			Context.Actor = Actor;
+			Context.AIController = AIController;
+			Context.Target = Target;
 			Context.TotalScore = Behaviors[Idx].InitialWeight;
 
 			float CompensationFactor = 1.0 - (1.0 / Behaviors[Idx].Considerations.Num());
@@ -77,5 +78,6 @@ FIAUSBehaviorContext IAUSEvaluator::ChooseBehavior(AAIController* Controller, co
 			}
 		}
 	}
+
 	return BestContext;
 }

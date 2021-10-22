@@ -16,20 +16,20 @@ float UIAUSConsideration_Cooldown::Score(const FIAUSBehaviorContext& Context) co
 {
 	if (Node.IsNone())
 	{
-		return 0;
+		return 0.0f;
 	}
 
 	const FString& Name = Node.ToString();
-	if (!Context.Evaluator->BehaviorNameIndex.Contains(Name))
+	if (!Context.Evaluator->BehaviorNameIndexMap.Contains(Name))
 	{
-		return 0;
+		return 0.0f;
 	}
 
-	const int32 Index = Context.Evaluator->BehaviorNameIndex[Name];
+	const int32 Index = Context.Evaluator->BehaviorNameIndexMap[Name];
 
-	if (Context.Evaluator->Behaviors[Index].LastExecutionTime == 0)
+	if (Context.Evaluator->Behaviors[Index].LastExecutionTime == 0.0f)
 	{
-		return ResponseCurve->ComputeValue(1);
+		return ResponseCurve->ComputeValue(1.0f);
 	}
 
 	const float Seconds = GetWorld()->GetTimeSeconds() - Context.Evaluator->Behaviors[Index].LastExecutionTime;

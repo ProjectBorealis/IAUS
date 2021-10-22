@@ -14,13 +14,14 @@ UIAUSConsideration_Health::UIAUSConsideration_Health()
 
 float UIAUSConsideration_Health::Score(const FIAUSBehaviorContext& Context) const
 {
-	AActor* Actor = Context.Actor;
+	AActor* Target = Context.Target;
+
 	if (TargetsSelf)
 	{
-		Actor = Context.AIController->GetPawn();
+		Target = Context.AIController->GetPawn();
 	}
 
-	const UIAUSBaseHealthComponent* HealthComponent = Actor->FindComponentByClass<UIAUSBaseHealthComponent>();
+	const UIAUSBaseHealthComponent* HealthComponent = Target->FindComponentByClass<UIAUSBaseHealthComponent>();
 
 	if (!HealthComponent || HealthComponent->GetMaxHealth() <= 0.0f)
 	{

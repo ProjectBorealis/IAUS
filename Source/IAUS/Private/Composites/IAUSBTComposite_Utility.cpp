@@ -9,14 +9,14 @@
 
 UIAUSBTComposite_Utility::UIAUSBTComposite_Utility(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/) : Super(ObjectInitializer)
 {
-	NodeName = TEXT("Utility");
+	NodeName = TEXT("Utility Selector");
 }
 
 void UIAUSBTComposite_Utility::InitializeMemory(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTMemoryInit::Type InitType) const
 {
 	if (InitType == EBTMemoryInit::Initialize)
 	{
-		FIAUSBTCompositeUtilityMemory* Memory = CastInstanceNodeMemory<FIAUSBTCompositeUtilityMemory>(NodeMemory);
+		FIAUSBTComposite_UtilityMemory* Memory = CastInstanceNodeMemory<FIAUSBTComposite_UtilityMemory>(NodeMemory);
 
 		for (int32 Idx = 0; Idx < GetChildrenNum(); ++Idx)
 		{
@@ -59,11 +59,16 @@ void UIAUSBTComposite_Utility::InitializeFromAsset(UBehaviorTree& Asset)
 	}
 }
 
+uint16 UIAUSBTComposite_Utility::GetInstanceMemorySize() const
+{
+	return sizeof(FIAUSBTComposite_UtilityMemory);
+}
+
 int32 UIAUSBTComposite_Utility::GetNextChildHandler(FBehaviorTreeSearchData& SearchData, int32 PrevChild, EBTNodeResult::Type LastResult) const
 {
-	FIAUSBTCompositeUtilityMemory* Memory = GetNodeMemory<FIAUSBTCompositeUtilityMemory>(SearchData);
+	FIAUSBTComposite_UtilityMemory* Memory = GetNodeMemory<FIAUSBTComposite_UtilityMemory>(SearchData);
 	int32 NextChildIdx = BTSpecialChild::ReturnToParent;
-	AActor* TargetActor = nullptr;
+	AActor* Target = nullptr;
 	const int32 CurrentBehaviorIndex = Memory->Context.BehaviorIndex;
 	const UIAUSBTComposite_Behavior* CurrentBehavior = Cast<UIAUSBTComposite_Behavior>(Children[CurrentBehaviorIndex].ChildComposite);
 
@@ -75,19 +80,14 @@ int32 UIAUSBTComposite_Utility::GetNextChildHandler(FBehaviorTreeSearchData& Sea
 		(PrevChild != CurrentBehaviorIndex || LastResult != EBTNodeResult::Failed) && (Memory->Context.TotalScore != 0))
 	{
 		NextChildIdx = Memory->Context.BehaviorIndex;
-		TargetActor = Memory->Context.Actor;
+		Target = Memory->Context.Target;
 	}
 
-	SearchData.OwnerComp.GetBlackboardComponent()->SetValueAsObject(BlackboardTargetKey.SelectedKeyName, TargetActor);
-	if (TargetActor)
+	SearchData.OwnerComp.GetBlackboardComponent()->SetValueAsObject(BlackboardTargetKey.SelectedKeyName, Target);
+	if (Target)
 	{
-		SearchData.OwnerComp.GetBlackboardComponent()->SetValueAsVector(BlackboardLKPKey.SelectedKeyName, TargetActor->GetActorLocation());
+		SearchData.OwnerComp.GetBlackboardComponent()->SetValueAsVector(BlackboardLKPKey.SelectedKeyName, Target->GetActorLocation());
 	}
 
 	return NextChildIdx;
-}
-
-uint16 UIAUSBTComposite_Utility::GetInstanceMemorySize() const
-{
-	return sizeof(FIAUSBTCompositeUtilityMemory);
 }

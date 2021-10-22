@@ -13,7 +13,7 @@ UIAUSConsideration_Distance::UIAUSConsideration_Distance()
 
 float UIAUSConsideration_Distance::Score(const FIAUSBehaviorContext& Context) const
 {
-	const float Input = FVector::Distance(Context.AIController->GetPawn()->GetActorLocation(), Context.Actor->GetActorLocation());
+	const float Input = FVector::Distance(Context.AIController->GetPawn()->GetActorLocation(), Context.Target->GetActorLocation());
 	const float Normalized = (Input - Minimum) / (Maximum - Minimum);
 
 	return ResponseCurve->ComputeValue(Normalized);
