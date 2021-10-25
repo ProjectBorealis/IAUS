@@ -3,11 +3,9 @@
 #include "IAUSEvaluator.h"
 
 #include "AIController.h"
-#include "GameFramework/Character.h"
 
 #include "Decorators/IAUSBTDecorator_Consideration.h"
 #include "IAUS/IAUSCommon.h"
-#include "Stats/Stats.h"
 
 DECLARE_CYCLE_STAT(TEXT("IAUS Choose Behavior"), STAT_IAUSChooseBehavior, STATGROUP_IAUS);
 

@@ -1,8 +1,8 @@
 // Copyright Project Borealis
 
-#include "IAUS/Public/Decorators/IAUSBTDecorator_Consideration.h"
+#include "Decorators/IAUSBTDecorator_Consideration.h"
 
-#include "IAUS/Public/Composites/IAUSBTComposite_Utility.h"
+#include "IAUSEvaluator.h"
 
 float UIAUSBTDecorator_Consideration::Score(const FIAUSBehaviorContext& Context) const
 {

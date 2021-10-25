@@ -1,8 +1,6 @@
 // Copyright Project Borealis
 
-#include "IAUS/Public/Components/IAUSHealthComponent.h"
-
-#include "GameFramework/Actor.h"
+#include "Components/IAUSHealthComponent.h"
 
 // Sets default values for this component's properties
 UIAUSHealthComponent::UIAUSHealthComponent()

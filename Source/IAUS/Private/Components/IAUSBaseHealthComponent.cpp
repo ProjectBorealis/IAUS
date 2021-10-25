@@ -1,8 +1,6 @@
 // Copyright Project Borealis
 
-#include "IAUS/Public/Components/IAUSBaseHealthComponent.h"
-
-#include "GameFramework/Actor.h"
+#include "Components/IAUSBaseHealthComponent.h"
 
 void UIAUSBaseHealthComponent::Heal(float HealAmount, bool bForce) {}
 

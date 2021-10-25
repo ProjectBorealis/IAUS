@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-#include "IAUS/Public/Components/IAUSBaseHealthComponent.h"
+#include "Components/IAUSBaseHealthComponent.h"
 
 #include "IAUSHealthComponent.generated.h"
 

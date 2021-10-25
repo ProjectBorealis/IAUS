@@ -1,10 +1,10 @@
 // Copyright Project Borealis
 
-#include "IAUS/Public/Considerations/IAUSConsideration_Distance.h"
-
-#include "IAUS/Public/Composites/IAUSBTComposite_Utility.h"
+#include "Considerations/IAUSConsideration_Distance.h"
 
 #include "AIController.h"
+
+#include "IAUSEvaluator.h"
 
 UIAUSConsideration_Distance::UIAUSConsideration_Distance()
 {

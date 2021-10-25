@@ -1,11 +1,11 @@
 // Copyright Project Borealis
 
-#include "IAUS/Public/Composites/IAUSBTComposite_Utility.h"
+#include "Composites/IAUSBTComposite_Utility.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
 
-#include "IAUS/Public/Composites/IAUSBTComposite_Behavior.h"
-#include "IAUS/Public/Decorators/IAUSBTDecorator_Consideration.h"
+#include "Composites/IAUSBTComposite_Behavior.h"
+#include "Decorators/IAUSBTDecorator_Consideration.h"
 
 UIAUSBTComposite_Utility::UIAUSBTComposite_Utility(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/) : Super(ObjectInitializer)
 {

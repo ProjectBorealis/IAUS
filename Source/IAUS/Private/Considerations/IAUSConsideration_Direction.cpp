@@ -1,10 +1,10 @@
 // Copyright Project Borealis
 
-#include "IAUS/Public/Considerations/IAUSConsideration_Direction.h"
-
-#include "IAUS/Public/Composites/IAUSBTComposite_Utility.h"
+#include "Considerations/IAUSConsideration_Direction.h"
 
 #include "AIController.h"
+
+#include "IAUSEvaluator.h"
 
 UIAUSConsideration_Direction::UIAUSConsideration_Direction() {}
 
