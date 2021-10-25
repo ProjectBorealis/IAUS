@@ -1,4 +1,4 @@
-// Copyright Project Borealis. All rights reserved.
+// Copyright Project Borealis
 
 #include "Decorators/IAUSBTDecorator_Utility.h"
 

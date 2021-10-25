@@ -1,4 +1,4 @@
-// Copyright Project Borealis. All rights reserved.
+// Copyright Project Borealis
 
 #include "IAUS/Public/Composites/IAUSBTComposite_Utility.h"
 
