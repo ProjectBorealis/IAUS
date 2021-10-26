@@ -50,18 +50,16 @@ FIAUSBehaviorContext IAUSEvaluator::ChooseBehavior(AAIController* AIController, 
 			Context.Target = Target;
 			Context.TotalScore = Behaviors[Idx].InitialWeight;
 
-			float CompensationFactor = 1.0 - (1.0 / Behaviors[Idx].Considerations.Num());
-
 			for (auto Consideration : Behaviors[Idx].Considerations)
 			{
-				float Score = Consideration->Score(Context);
+				const float Score = Consideration->Score(Context);
 				if (Score <= 0)
 				{
 					Context.TotalScore = 0;
 					break;
 				}
 
-				float Modification = (1.0 - Score) * CompensationFactor;
+				const float Modification = (1.0 - Score) * Behaviors[Idx].CompensationFactor;
 				Context.TotalScore *= Score + (Modification * Score);
 			}
 
