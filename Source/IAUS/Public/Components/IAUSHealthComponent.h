@@ -1,10 +1,10 @@
-// Copyright 2017-2020 Project Borealis
+// Copyright Project Borealis
 
 #pragma once
 
 #include "CoreMinimal.h"
 
-#include "IAUS/Public/Components/IAUSBaseHealthComponent.h"
+#include "Components/IAUSBaseHealthComponent.h"
 
 #include "IAUSHealthComponent.generated.h"
 

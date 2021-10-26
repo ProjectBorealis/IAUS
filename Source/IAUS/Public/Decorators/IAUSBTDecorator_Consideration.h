@@ -1,12 +1,12 @@
-// Copyright 2017-2020 Project Borealis
+// Copyright Project Borealis
 
 #pragma once
 
 #include "CoreMinimal.h"
 
-#include "IAUSResponseCurve.h"
-
 #include "BehaviorTree/BTDecorator.h"
+
+#include "IAUSResponseCurve.h"
 
 #include "IAUSBTDecorator_Consideration.generated.h"
 

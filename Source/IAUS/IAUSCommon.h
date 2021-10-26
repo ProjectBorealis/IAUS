@@ -1,4 +1,4 @@
-// Copyright 2017-2021 Project Borealis
+// Copyright Project Borealis
 
 #pragma once
 

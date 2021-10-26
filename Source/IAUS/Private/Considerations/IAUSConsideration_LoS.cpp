@@ -1,6 +1,6 @@
-// Copyright 2017-2020 Project Borealis
+// Copyright Project Borealis
 
-#include "IAUS/Public/Considerations/IAUSConsideration_LoS.h"
+#include "Considerations/IAUSConsideration_LoS.h"
 
 #include "AIController.h"
 

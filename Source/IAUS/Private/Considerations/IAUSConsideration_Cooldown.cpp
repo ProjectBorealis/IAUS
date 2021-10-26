@@ -1,11 +1,10 @@
-// Copyright 2017-2020 Project Borealis
+// Copyright Project Borealis
 
-#include "IAUS/Public/Considerations/IAUSConsideration_Cooldown.h"
-
-#include "IAUS/Public/Composites/IAUSBTComposite_Utility.h"
+#include "Considerations/IAUSConsideration_Cooldown.h"
 
 #include "AIController.h"
-#include "Engine/World.h"
+
+#include "IAUSEvaluator.h"
 
 UIAUSConsideration_Cooldown::UIAUSConsideration_Cooldown()
 {
