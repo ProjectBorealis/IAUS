@@ -32,6 +32,7 @@ void UIAUSBTComposite_Utility::InitializeMemory(UBehaviorTreeComponent& OwnerCom
 			Behavior.bTargetNeutral = BehaviorComposite->bTargetNeutral;
 			Behavior.bTargetHostile = BehaviorComposite->bTargetHostile;
 			Behavior.InitialWeight = BehaviorComposite->InitialWeight;
+			Behavior.CompensationFactor = 1.0 - (1.0 / Children[Idx].Decorators.Num());
 
 			for (auto Decorator : Children[Idx].Decorators)
 			{

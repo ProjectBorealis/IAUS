@@ -15,8 +15,9 @@ UCLASS(Meta = (DisplayName = "Line of Sight Consideration", Category = "Consider
 class IAUS_API UIAUSConsideration_LoS : public UIAUSBTDecorator_Consideration
 {
 	GENERATED_BODY()
-	UIAUSConsideration_LoS();
 
 public:
+	UIAUSConsideration_LoS();
+
 	virtual float Score(const struct FIAUSBehaviorContext& Context) const override;
 };

@@ -22,6 +22,7 @@ struct FIAUSBehavior
 
 	float InitialWeight;
 	float LastExecutionTime;
+	float CompensationFactor;
 
 	TArray<class UIAUSBTDecorator_Consideration*> Considerations;
 };
