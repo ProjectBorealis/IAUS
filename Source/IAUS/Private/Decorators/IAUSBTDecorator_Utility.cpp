@@ -9,7 +9,7 @@
 #include "Composites/IAUSBTComposite_Behavior.h"
 #include "Composites/IAUSBTComposite_Utility.h"
 #include "Decorators/IAUSBTDecorator_Consideration.h"
-#include "IAUS/IAUSCommon.h"
+#include "IAUSCommon.h"
 
 DECLARE_CYCLE_STAT(TEXT("IAUS Decorator Tick Node"), STAT_IAUSDecoratorTickNode, STATGROUP_IAUS);
 

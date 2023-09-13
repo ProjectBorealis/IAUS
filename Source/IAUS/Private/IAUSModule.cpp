@@ -3,7 +3,7 @@
 #include "IAUSModule.h"
 
 #include "DetailCustomizations/IAUSBTDecorator_ConsiderationDetails.h"
-#include "IAUS/IAUSCommon.h"
+#include "IAUSCommon.h"
 
 #if WITH_EDITOR
 #include "Editor/PropertyEditor/Public/PropertyEditorModule.h"

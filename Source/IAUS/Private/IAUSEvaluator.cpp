@@ -5,7 +5,7 @@
 #include "AIController.h"
 
 #include "Decorators/IAUSBTDecorator_Consideration.h"
-#include "IAUS/IAUSCommon.h"
+#include "IAUSCommon.h"
 
 DECLARE_CYCLE_STAT(TEXT("IAUS Choose Behavior"), STAT_IAUSChooseBehavior, STATGROUP_IAUS);
 
