@@ -21,12 +21,12 @@ int32 SResponseCurvePreviewWidget::OnPaint(const FPaintArgs& Args, const FGeomet
 	// Rendering info
 	bool bEnabled = ShouldBeEnabled(bParentEnabled);
 	ESlateDrawEffect DrawEffects = bEnabled ? ESlateDrawEffect::None : ESlateDrawEffect::DisabledEffect;
-	const FSlateBrush* TimelineAreaBrush = FEditorStyle::GetBrush("Profiler.LineGraphArea");
-	const FSlateBrush* WhiteBrush = FEditorStyle::GetBrush("WhiteTexture");
+	const FSlateBrush* TimelineAreaBrush = FAppStyle::GetBrush("Profiler.LineGraphArea");
+	const FSlateBrush* WhiteBrush = FAppStyle::GetBrush("WhiteTexture");
 
 	// Draw timeline background
 	FSlateDrawElement::MakeBox(OutDrawElements, LayerId,
-							   AllottedGeometry.ToPaintGeometry(FVector2D(0, 0), FVector2D(AllottedGeometry.Size.X, AllottedGeometry.Size.Y)),
+							   AllottedGeometry.ToPaintGeometry(FVector2D(0, 0), FSlateLayoutTransform(FVector2D(AllottedGeometry.Size.X, AllottedGeometry.Size.Y))),
 							   TimelineAreaBrush, DrawEffects, TimelineAreaBrush->GetTint(InWidgetStyle) * InWidgetStyle.GetColorAndOpacityTint());
 
 	LayerId++;
