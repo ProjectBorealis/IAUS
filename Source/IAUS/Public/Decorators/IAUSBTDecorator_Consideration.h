@@ -17,7 +17,7 @@ class IAUS_API UIAUSBTDecorator_Consideration : public UBTDecorator
 
 public:
 	UPROPERTY(EditAnywhere, Category = "Utility")
-	UIAUSResponseCurve* ResponseCurve;
+	TObjectPtr<UIAUSResponseCurve> ResponseCurve;
 
 	virtual float Score(const struct FIAUSBehaviorContext& Context) const;
 };

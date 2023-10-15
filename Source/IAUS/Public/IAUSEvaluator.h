@@ -7,8 +7,8 @@
 struct FIAUSBehaviorContext
 {
 	class IAUSEvaluator* Evaluator;
-	class AActor* Target;
-	class AAIController* AIController;
+	TObjectPtr<class AActor> Target;
+	TObjectPtr<class AAIController> AIController;
 	float TotalScore;
 	int32 BehaviorIndex;
 };
