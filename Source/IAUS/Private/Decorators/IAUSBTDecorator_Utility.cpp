@@ -68,8 +68,10 @@ void UIAUSBTDecorator_Utility::InitializeMemory(UBehaviorTreeComponent& OwnerCom
 
 		if (const UIAUSBTComposite_Utility* UtilityComposite = Cast<UIAUSBTComposite_Utility>(GetMyNode()))
 		{
+			// NOTE: const cast is okay because GetNodeMemory effectively does not touch the Node parameter.
+			// It's an oversight that the Node parameter is not marged as const. Instead of fixing it in UE, the fix is here.
 			Memory->MemoryUtilityComposite = UtilityComposite->CastInstanceNodeMemory<FIAUSBTComposite_UtilityMemory>(
-				OwnerComp.GetNodeMemory(UtilityComposite, OwnerComp.GetActiveInstanceIdx()));
+				OwnerComp.GetNodeMemory(const_cast<UIAUSBTComposite_Utility*>(UtilityComposite), OwnerComp.GetActiveInstanceIdx()));
 			if (Memory->MemoryUtilityComposite)
 			{
 				Memory->MemoryUtilityComposite->BehaviorMemories.Empty();
@@ -81,7 +83,7 @@ void UIAUSBTDecorator_Utility::InitializeMemory(UBehaviorTreeComponent& OwnerCom
 					{
 						Memory->MemoryUtilityComposite->BehaviorMemories.Add(
 							BehaviorComposite->CastInstanceNodeMemory<FIAUSBTComposite_BehaviorMemory>(
-								OwnerComp.GetNodeMemory(BehaviorComposite, OwnerComp.GetActiveInstanceIdx())));
+								OwnerComp.GetNodeMemory(const_cast<UIAUSBTComposite_Behavior*>(BehaviorComposite), OwnerComp.GetActiveInstanceIdx())));
 					}
 				}
 			}
