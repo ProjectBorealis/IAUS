@@ -17,7 +17,7 @@ void UIAUSBTComposite_Utility::InitializeMemory(UBehaviorTreeComponent& OwnerCom
 	if (InitType == EBTMemoryInit::Initialize)
 	{
 		FIAUSBTComposite_UtilityMemory* Memory = CastInstanceNodeMemory<FIAUSBTComposite_UtilityMemory>(NodeMemory);
-
+		Memory->Context = {};
 		for (int32 Idx = 0; Idx < GetChildrenNum(); ++Idx)
 		{
 			const UIAUSBTComposite_Behavior* BehaviorComposite = Cast<UIAUSBTComposite_Behavior>(Children[Idx].ChildComposite);
@@ -34,7 +34,7 @@ void UIAUSBTComposite_Utility::InitializeMemory(UBehaviorTreeComponent& OwnerCom
 			Behavior.InitialWeight = BehaviorComposite->InitialWeight;
 			Behavior.CompensationFactor = 1.0 - (1.0 / Children[Idx].Decorators.Num());
 
-			for (auto Decorator : Children[Idx].Decorators)
+			for (const auto& Decorator : Children[Idx].Decorators)
 			{
 				UIAUSBTDecorator_Consideration* Consideration = Cast<UIAUSBTDecorator_Consideration>(Decorator);
 				if (Consideration)
@@ -71,18 +71,23 @@ int32 UIAUSBTComposite_Utility::GetNextChildHandler(FBehaviorTreeSearchData& Sea
 	int32 NextChildIdx = BTSpecialChild::ReturnToParent;
 	AActor* Target = nullptr;
 	const int32 CurrentBehaviorIndex = Memory->Context.BehaviorIndex;
-	const UIAUSBTComposite_Behavior* CurrentBehavior = Cast<UIAUSBTComposite_Behavior>(Children[CurrentBehaviorIndex].ChildComposite);
+	const UIAUSBTComposite_Behavior* CurrentBehavior = Children.IsValidIndex(CurrentBehaviorIndex)
+		                                                   ? Cast<UIAUSBTComposite_Behavior>(
+			                                                   Children[CurrentBehaviorIndex].ChildComposite)
+		                                                   : nullptr;
 
 	// Reasons why the current behavior may not be valid for execution:
 	// - It's the same as the previous and it's non-interruptible.
 	// - It's the same as the previous behavior and it already failed to execute.
-	// - Its score is 0.
-	if ((PrevChild != CurrentBehaviorIndex || !CurrentBehavior || CurrentBehavior->bInterruptible) &&
-		(PrevChild != CurrentBehaviorIndex || LastResult != EBTNodeResult::Failed) && (Memory->Context.TotalScore != 0))
+	// - Its score is not above 0.
+	const bool bSameAsPrevious = PrevChild == CurrentBehaviorIndex;
+	if (!(bSameAsPrevious && CurrentBehavior && !CurrentBehavior->bInterruptible) &&
+		!(bSameAsPrevious && LastResult == EBTNodeResult::Failed) && (Memory->Context.TotalScore > 0.f))
 	{
 		NextChildIdx = Memory->Context.BehaviorIndex;
-		Target = Memory->Context.Target;
 	}
+
+	Target = Memory->Context.Target;
 
 	SearchData.OwnerComp.GetBlackboardComponent()->SetValueAsObject(BlackboardTargetKey.SelectedKeyName, Target);
 	if (Target)

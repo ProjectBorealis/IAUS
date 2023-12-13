@@ -26,7 +26,7 @@ class IAUS_API UIAUSBTComposite_Utility : public UBTCompositeNode
 public:
 	UIAUSBTComposite_Utility(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	virtual void InitializeMemory(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTMemoryInit::Type InitType) const override;
+	virtual void InitializeMemory(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTMemoryInit::Type InitType) const override final;
 
 	virtual void InitializeFromAsset(UBehaviorTree& Asset) override;
 

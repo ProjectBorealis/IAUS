@@ -19,8 +19,12 @@ FIAUSBehaviorContext IAUSEvaluator::ChooseBehavior(AAIController* AIController, 
 {
 	SCOPE_CYCLE_COUNTER(STAT_IAUSChooseBehavior);
 
-	FIAUSBehaviorContext BestContext = {};
-	BestContext.TotalScore = 0;
+	if (Targets.IsEmpty())
+	{
+		return {};
+	}
+
+	FIAUSBehaviorContext BestContext;
 
 	for (int32 Idx = 0; Idx < Behaviors.Num(); Idx++)
 	{
@@ -50,7 +54,7 @@ FIAUSBehaviorContext IAUSEvaluator::ChooseBehavior(AAIController* AIController, 
 			Context.Target = Target;
 			Context.TotalScore = Behaviors[Idx].InitialWeight;
 
-			for (auto Consideration : Behaviors[Idx].Considerations)
+			for (const auto& Consideration : Behaviors[Idx].Considerations)
 			{
 				const float Score = Consideration->Score(Context);
 				if (Score <= 0)

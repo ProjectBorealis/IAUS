@@ -22,32 +22,31 @@ FString UIAUSConsideration_LineOfSightBetweenActors::GetStaticDescription() cons
 
 float UIAUSConsideration_LineOfSightBetweenActors::Score(const FIAUSBehaviorContext& Context) const
 {
-	if (Context.AIController)
+	if (!Context.AIController)
 	{
-		if (const UBlackboardComponent* Blackboard = Context.AIController->GetBlackboardComponent())
-		{
-			if (const UWorld* World = Context.AIController->GetWorld())
-			{
-				const AActor* ActorA = Cast<AActor>(Blackboard->GetValueAsObject(ActorAKey.SelectedKeyName));
-				const AActor* ActorB = Cast<AActor>(Blackboard->GetValueAsObject(ActorBKey.SelectedKeyName));
-				if (ActorA && ActorB)
-				{
-					const FVector& ActorALocation = ActorA->GetTargetLocation();
-					const FVector& ActorBLocation = ActorB->GetTargetLocation();
-
-					FCollisionQueryParams CollisionParams(SCENE_QUERY_STAT(LineOfSightBetweenActors), true);
-					CollisionParams.AddIgnoredActor(ActorA);
-					CollisionParams.AddIgnoredActor(ActorB);
-
-					const bool bHit = GetWorld()->LineTraceTestByChannel(ActorALocation, ActorBLocation, ECC_Visibility, CollisionParams);
-					if (!bHit)
-					{
-						return 1.0f;
-					}
-				}
-			}
-		}
+		return 0;
 	}
+	
+	const UBlackboardComponent* Blackboard = Context.AIController->GetBlackboardComponent();
+	if (!Blackboard)
+	{
+		return 0.f;
+	}
+	
+	const AActor* ActorA = Cast<AActor>(Blackboard->GetValueAsObject(ActorAKey.SelectedKeyName));
+	const AActor* ActorB = Cast<AActor>(Blackboard->GetValueAsObject(ActorBKey.SelectedKeyName));
+	if (!ActorA || !ActorB)
+	{
+		return 0.f;
+	}
+	
+	const FVector& ActorALocation = ActorA->GetTargetLocation();
+	const FVector& ActorBLocation = ActorB->GetTargetLocation();
 
-	return 0.0f;
+	FCollisionQueryParams CollisionParams(SCENE_QUERY_STAT(LineOfSightBetweenActors), true);
+	CollisionParams.AddIgnoredActor(ActorA);
+	CollisionParams.AddIgnoredActor(ActorB);
+
+	const bool bHit = GetWorld()->LineTraceTestByChannel(ActorALocation, ActorBLocation, ECC_Visibility, CollisionParams);
+	return bHit ? 0.f : 1.f;
 }

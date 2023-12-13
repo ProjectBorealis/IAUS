@@ -19,6 +19,7 @@ UIAUSBTDecorator_Utility::UIAUSBTDecorator_Utility(const FObjectInitializer& Obj
 
 	bNotifyTick = true;
 	bNotifyActivation = true;
+	bNotifyDeactivation = true;
 
 	SelectionCooldown = 0.25f;
 }
@@ -55,25 +56,32 @@ void UIAUSBTDecorator_Utility::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		}
 	}
 
-	EvaluateBehaviors(OwnerComp, NodeMemory);
+	EvaluateBehaviors(OwnerComp, MyMemory);
 }
 
-void UIAUSBTDecorator_Utility::OnNodeActivation(FBehaviorTreeSearchData& SearchData)
+void UIAUSBTDecorator_Utility::InitializeMemory(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
+                                                EBTMemoryInit::Type InitType) const
 {
-	if (FIAUSBTDecorator_UtilityMemory* MyMemory = GetNodeMemory<FIAUSBTDecorator_UtilityMemory>(SearchData))
+	if (InitType == EBTMemoryInit::Initialize)
 	{
+		FIAUSBTDecorator_UtilityMemory* Memory = CastInstanceNodeMemory<FIAUSBTDecorator_UtilityMemory>(NodeMemory);
+
 		if (const UIAUSBTComposite_Utility* UtilityComposite = Cast<UIAUSBTComposite_Utility>(GetMyNode()))
 		{
-			MyMemory->MemoryUtilityComposite = UtilityComposite->GetNodeMemory<FIAUSBTComposite_UtilityMemory>(SearchData);
-			if (FIAUSBTComposite_UtilityMemory* MemoryUtilityComposite = MyMemory->MemoryUtilityComposite)
+			Memory->MemoryUtilityComposite = UtilityComposite->CastInstanceNodeMemory<FIAUSBTComposite_UtilityMemory>(
+				OwnerComp.GetNodeMemory(UtilityComposite, OwnerComp.GetActiveInstanceIdx()));
+			if (Memory->MemoryUtilityComposite)
 			{
-				MemoryUtilityComposite->BehaviorMemories.Empty();
+				Memory->MemoryUtilityComposite->BehaviorMemories.Empty();
 
 				for (int32 Idx = 0; Idx < UtilityComposite->Children.Num(); Idx++)
 				{
-					if (const UIAUSBTComposite_Behavior* BehaviorComposite = Cast<UIAUSBTComposite_Behavior>(UtilityComposite->Children[Idx].ChildComposite))
+					if (const UIAUSBTComposite_Behavior* BehaviorComposite = Cast<UIAUSBTComposite_Behavior>(
+						UtilityComposite->Children[Idx].ChildComposite))
 					{
-						MemoryUtilityComposite->BehaviorMemories.Add(BehaviorComposite->GetNodeMemory<FIAUSBTComposite_BehaviorMemory>(SearchData));
+						Memory->MemoryUtilityComposite->BehaviorMemories.Add(
+							BehaviorComposite->CastInstanceNodeMemory<FIAUSBTComposite_BehaviorMemory>(
+								OwnerComp.GetNodeMemory(BehaviorComposite, OwnerComp.GetActiveInstanceIdx())));
 					}
 				}
 			}
@@ -85,7 +93,14 @@ bool UIAUSBTDecorator_Utility::CalculateRawConditionValue(UBehaviorTreeComponent
 {
 	FIAUSBTDecorator_UtilityMemory* Memory = CastInstanceNodeMemory<FIAUSBTDecorator_UtilityMemory>(NodeMemory);
 
-	return !Memory->IsContextInvalid;
+	// If this decorator instance isn't active yet it will not be ticked
+	// Because of this, we have to evaluate the behaviors now
+	if (!Memory->IsRelevant)
+	{
+		EvaluateBehaviors(OwnerComp, Memory);
+	}
+
+	return Memory->IsContextValid;
 }
 
 uint16 UIAUSBTDecorator_Utility::GetInstanceMemorySize() const
@@ -93,16 +108,24 @@ uint16 UIAUSBTDecorator_Utility::GetInstanceMemorySize() const
 	return sizeof(FIAUSBTDecorator_UtilityMemory);
 }
 
-void UIAUSBTDecorator_Utility::OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+void UIAUSBTDecorator_Utility::OnNodeActivation(FBehaviorTreeSearchData& SearchData)
 {
-	Super::OnBecomeRelevant(OwnerComp, NodeMemory);
+	Super::OnNodeActivation(SearchData);
 
-	EvaluateBehaviors(OwnerComp, NodeMemory);
+	FIAUSBTDecorator_UtilityMemory* Memory = GetNodeMemory<FIAUSBTDecorator_UtilityMemory>(SearchData);
+	Memory->IsRelevant = true;
 }
 
-void UIAUSBTDecorator_Utility::EvaluateBehaviors(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
+void UIAUSBTDecorator_Utility::OnNodeDeactivation(FBehaviorTreeSearchData& SearchData, EBTNodeResult::Type NodeResult)
 {
-	FIAUSBTDecorator_UtilityMemory* MyMemory = CastInstanceNodeMemory<FIAUSBTDecorator_UtilityMemory>(NodeMemory);
+	Super::OnNodeDeactivation(SearchData, NodeResult);
+
+	FIAUSBTDecorator_UtilityMemory* Memory = GetNodeMemory<FIAUSBTDecorator_UtilityMemory>(SearchData);
+	Memory->IsRelevant = false;
+}
+
+void UIAUSBTDecorator_Utility::EvaluateBehaviors(UBehaviorTreeComponent& OwnerComp, FIAUSBTDecorator_UtilityMemory* MyMemory) const
+{
 	if (!MyMemory || !MyMemory->MemoryUtilityComposite || !OwnerComp.GetAIOwner())
 	{
 		return;
@@ -113,13 +136,11 @@ void UIAUSBTDecorator_Utility::EvaluateBehaviors(UBehaviorTreeComponent& OwnerCo
 
 	UpdateBehaviorContext(OwnerComp, MemoryUtilityComposite);
 
-	if (MemoryUtilityComposite->Context.TotalScore == 0)
+	MyMemory->IsContextValid = MemoryUtilityComposite->Context.TotalScore != 0;
+	if (!MyMemory->IsContextValid)
 	{
-		MyMemory->IsContextInvalid = true;
 		return;
 	}
-
-	MyMemory->IsContextInvalid = false;
 
 	const int32 NextBehaviorIndex = MemoryUtilityComposite->Context.BehaviorIndex;
 	MemoryUtilityComposite->Evaluator.Behaviors[NextBehaviorIndex].LastExecutionTime = GetWorld()->GetTimeSeconds();
@@ -129,13 +150,14 @@ void UIAUSBTDecorator_Utility::EvaluateBehaviors(UBehaviorTreeComponent& OwnerCo
 	{
 		MemoryUtilityComposite->LastBehaviorChangeTime = GetWorld()->GetTimeSeconds();
 
-		OwnerComp.RequestExecution(EBTNodeResult::Failed);
+		OwnerComp.RequestBranchEvaluation(*this);
+		// OwnerComp.RequestExecution(EBTNodeResult::Failed);
 	}
 }
 
 void UIAUSBTDecorator_Utility::UpdateBehaviorContext(UBehaviorTreeComponent& OwnerComp, FIAUSBTComposite_UtilityMemory* MemoryUtilityComposite) const
 {
-	if (AAIController* AIController = Cast<AAIController>(OwnerComp.GetAIOwner()))
+	if (AAIController* AIController = OwnerComp.GetAIOwner())
 	{
 		TArray<AActor*> Targets;
 		AIController->GetPerceptionComponent()->GetKnownPerceivedActors(nullptr, Targets);

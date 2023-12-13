@@ -12,8 +12,9 @@ struct FIAUSBTComposite_UtilityMemory;
 
 struct FIAUSBTDecorator_UtilityMemory
 {
-	bool IsContextInvalid;
-	FIAUSBTComposite_UtilityMemory* MemoryUtilityComposite;
+	bool IsRelevant = false;
+	bool IsContextValid = false;
+	FIAUSBTComposite_UtilityMemory* MemoryUtilityComposite = nullptr;
 };
 
 UCLASS()
@@ -28,15 +29,17 @@ protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
 	/** Initializes the memories of all the IAUS nodes */
-	virtual void OnNodeActivation(FBehaviorTreeSearchData& SearchData) override;
+	virtual void InitializeMemory(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTMemoryInit::Type InitType) const override;
 
 	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;
 
 	virtual uint16 GetInstanceMemorySize() const override;
 
-	virtual void OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+	virtual void OnNodeActivation(FBehaviorTreeSearchData& SearchData) override;
 
-	virtual void EvaluateBehaviors(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const;
+	virtual void OnNodeDeactivation(FBehaviorTreeSearchData& SearchData, EBTNodeResult::Type NodeResult) override;
+
+	virtual void EvaluateBehaviors(UBehaviorTreeComponent& OwnerComp, FIAUSBTDecorator_UtilityMemory* NodeMemory) const;
 
 	/** Finds the targets, lets the evaluator choose a new behavior, and updates the Context inside the MemoryUtilityComposite */
 	virtual void UpdateBehaviorContext(UBehaviorTreeComponent& OwnerComp, FIAUSBTComposite_UtilityMemory* MemoryUtilityComposite) const;

@@ -4,25 +4,27 @@
 
 #include "CoreMinimal.h"
 
+#include "BehaviorTree/BehaviorTreeTypes.h"
+
 struct FIAUSBehaviorContext
 {
-	class IAUSEvaluator* Evaluator;
-	TObjectPtr<class AActor> Target;
-	TObjectPtr<class AAIController> AIController;
-	float TotalScore;
-	int32 BehaviorIndex;
+	class IAUSEvaluator* Evaluator = nullptr;
+	AActor* Target = nullptr;
+	class AAIController* AIController = nullptr;
+	float TotalScore = 0.f;
+	int32 BehaviorIndex = BTSpecialChild::NotInitialized;
 };
 
 struct FIAUSBehavior
 {
-	bool bTargetSelf;
-	bool bTargetFriendly;
-	bool bTargetNeutral;
-	bool bTargetHostile;
+	bool bTargetSelf = false;
+	bool bTargetFriendly = false;
+	bool bTargetNeutral = false;
+	bool bTargetHostile = false;
 
-	float InitialWeight;
-	float LastExecutionTime;
-	float CompensationFactor;
+	float InitialWeight = 0.f;
+	float LastExecutionTime = 0.f;
+	float CompensationFactor = 0.f;
 
 	TArray<class UIAUSBTDecorator_Consideration*> Considerations;
 };
