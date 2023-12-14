@@ -46,12 +46,15 @@ void UIAUSBTDecorator_Utility::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 
 	if (const UIAUSBTComposite_Utility* UtilityComposite = Cast<UIAUSBTComposite_Utility>(GetMyNode()))
 	{
-		if (const UIAUSBTComposite_Behavior* CurrentBehaviorComposite = Cast<UIAUSBTComposite_Behavior>(UtilityComposite->Children[CurrentBehaviorIndex].ChildComposite))
+		if (UtilityComposite->Children.IsValidIndex(CurrentBehaviorIndex))
 		{
-			// If the current behavior is uninterruptible and it's executing, don't look for a new behavior
-			if (!CurrentBehaviorComposite->bInterruptible && MemoryUtilityComposite->BehaviorMemories[CurrentBehaviorIndex]->bExecuting)
+			if (const UIAUSBTComposite_Behavior* CurrentBehaviorComposite = Cast<UIAUSBTComposite_Behavior>(UtilityComposite->Children[CurrentBehaviorIndex].ChildComposite))
 			{
-				return;
+				// If the current behavior is uninterruptible and it's executing, don't look for a new behavior
+				if (!CurrentBehaviorComposite->bInterruptible && MemoryUtilityComposite->BehaviorMemories[CurrentBehaviorIndex]->bExecuting)
+				{
+					return;
+				}
 			}
 		}
 	}
