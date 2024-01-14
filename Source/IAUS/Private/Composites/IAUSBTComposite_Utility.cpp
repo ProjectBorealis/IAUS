@@ -32,7 +32,7 @@ void UIAUSBTComposite_Utility::InitializeMemory(UBehaviorTreeComponent& OwnerCom
 			Behavior.bTargetNeutral = BehaviorComposite->bTargetNeutral;
 			Behavior.bTargetHostile = BehaviorComposite->bTargetHostile;
 			Behavior.InitialWeight = BehaviorComposite->InitialWeight;
-			Behavior.CompensationFactor = 1.0 - (1.0 / Children[Idx].Decorators.Num());
+			Behavior.CompensationFactor = 1.0f - (1.0f / Children[Idx].Decorators.Num());
 
 			for (const auto& Decorator : Children[Idx].Decorators)
 			{
@@ -85,9 +85,8 @@ int32 UIAUSBTComposite_Utility::GetNextChildHandler(FBehaviorTreeSearchData& Sea
 		!(bSameAsPrevious && LastResult == EBTNodeResult::Failed) && (Memory->Context.TotalScore > 0.f))
 	{
 		NextChildIdx = Memory->Context.BehaviorIndex;
+		Target = Memory->Context.Target;
 	}
-
-	Target = Memory->Context.Target;
 
 	SearchData.OwnerComp.GetBlackboardComponent()->SetValueAsObject(BlackboardTargetKey.SelectedKeyName, Target);
 	if (Target)

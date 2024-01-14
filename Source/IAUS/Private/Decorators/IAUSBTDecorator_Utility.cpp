@@ -156,13 +156,14 @@ void UIAUSBTDecorator_Utility::EvaluateBehaviors(UBehaviorTreeComponent& OwnerCo
 		MemoryUtilityComposite->LastBehaviorChangeTime = GetWorld()->GetTimeSeconds();
 
 		OwnerComp.RequestBranchEvaluation(*this);
-		// OwnerComp.RequestExecution(EBTNodeResult::Failed);
+		//OwnerComp.RequestExecution(EBTNodeResult::Failed);
 	}
 }
 
 void UIAUSBTDecorator_Utility::UpdateBehaviorContext(UBehaviorTreeComponent& OwnerComp, FIAUSBTComposite_UtilityMemory* MemoryUtilityComposite) const
 {
-	if (AAIController* AIController = OwnerComp.GetAIOwner())
+	AAIController* AIController = OwnerComp.GetAIOwner();
+	if (AIController)
 	{
 		TArray<AActor*> Targets;
 		AIController->GetPerceptionComponent()->GetKnownPerceivedActors(nullptr, Targets);
