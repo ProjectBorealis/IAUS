@@ -10,6 +10,7 @@
 UIAUSBTComposite_Utility::UIAUSBTComposite_Utility(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/) : Super(ObjectInitializer)
 {
 	NodeName = TEXT("Utility Selector");
+	bUseChildExecutionNotify = true;
 }
 
 void UIAUSBTComposite_Utility::InitializeMemory(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTMemoryInit::Type InitType) const
@@ -84,7 +85,7 @@ int32 UIAUSBTComposite_Utility::GetNextChildHandler(FBehaviorTreeSearchData& Sea
 	if (!(bSameAsPrevious && CurrentBehavior && !CurrentBehavior->bInterruptible) &&
 		!(bSameAsPrevious && LastResult == EBTNodeResult::Failed) && (Memory->Context.TotalScore > 0.f))
 	{
-		NextChildIdx = Memory->Context.BehaviorIndex;
+		NextChildIdx = CurrentBehaviorIndex;
 		Target = Memory->Context.Target;
 	}
 
@@ -95,4 +96,16 @@ int32 UIAUSBTComposite_Utility::GetNextChildHandler(FBehaviorTreeSearchData& Sea
 	}
 
 	return NextChildIdx;
+}
+
+void UIAUSBTComposite_Utility::NotifyChildExecution(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
+                                                    int32 ChildIdx, EBTNodeResult::Type& NodeResult) const
+{
+	Super::NotifyChildExecution(OwnerComp, NodeMemory, ChildIdx, NodeResult);
+
+	FIAUSBTComposite_UtilityMemory* Memory = CastInstanceNodeMemory<FIAUSBTComposite_UtilityMemory>(NodeMemory);
+	if (Memory->Evaluator.Behaviors.IsValidIndex(Memory->Context.BehaviorIndex))
+	{
+		Memory->Evaluator.Behaviors[Memory->Context.BehaviorIndex].LastExecutionTime = GetWorld()->GetTimeSeconds();
+	}
 }

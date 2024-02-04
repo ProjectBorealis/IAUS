@@ -2,7 +2,6 @@
 
 #include "Considerations/IAUSConsideration_Cooldown.h"
 
-#include "AIController.h"
 #include "Engine/World.h"
 
 #include "IAUSEvaluator.h"

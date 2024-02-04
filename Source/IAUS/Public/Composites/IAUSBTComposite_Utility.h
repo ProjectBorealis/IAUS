@@ -34,6 +34,8 @@ public:
 
 protected:
 	virtual int32 GetNextChildHandler(struct FBehaviorTreeSearchData& SearchData, int32 PrevChild, EBTNodeResult::Type LastResult) const override;
+	
+	virtual void NotifyChildExecution(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, int32 ChildIdx, EBTNodeResult::Type& NodeResult) const override;
 
 	/* Blackboard key where the target is stored */
 	UPROPERTY(EditAnywhere, Category = Blackboard)

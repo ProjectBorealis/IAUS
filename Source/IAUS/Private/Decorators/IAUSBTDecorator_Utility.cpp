@@ -148,7 +148,6 @@ void UIAUSBTDecorator_Utility::EvaluateBehaviors(UBehaviorTreeComponent& OwnerCo
 	}
 
 	const int32 NextBehaviorIndex = MemoryUtilityComposite->Context.BehaviorIndex;
-	MemoryUtilityComposite->Evaluator.Behaviors[NextBehaviorIndex].LastExecutionTime = GetWorld()->GetTimeSeconds();
 
 	// If the next behavior is different from the previous or the target is different, stop the execution of the current behavior
 	if (NextBehaviorIndex != static_cast<int32>(MemoryUtilityComposite->CurrentChild) || PreviousActor != MemoryUtilityComposite->Context.Target)
@@ -156,7 +155,6 @@ void UIAUSBTDecorator_Utility::EvaluateBehaviors(UBehaviorTreeComponent& OwnerCo
 		MemoryUtilityComposite->LastBehaviorChangeTime = GetWorld()->GetTimeSeconds();
 
 		OwnerComp.RequestBranchEvaluation(*this);
-		//OwnerComp.RequestExecution(EBTNodeResult::Failed);
 	}
 }
 
