@@ -6,6 +6,8 @@
 
 #include "IAUSEvaluator.h"
 
+#include UE_INLINE_GENERATED_CPP_BY_NAME(IAUSConsideration_Distance)
+
 UIAUSConsideration_Distance::UIAUSConsideration_Distance()
 {
 	Maximum = 2000;

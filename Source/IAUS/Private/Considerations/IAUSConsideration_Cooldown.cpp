@@ -6,6 +6,8 @@
 
 #include "IAUSEvaluator.h"
 
+#include UE_INLINE_GENERATED_CPP_BY_NAME(IAUSConsideration_Cooldown)
+
 UIAUSConsideration_Cooldown::UIAUSConsideration_Cooldown()
 {
 	CoolDownTime = 5.0f;

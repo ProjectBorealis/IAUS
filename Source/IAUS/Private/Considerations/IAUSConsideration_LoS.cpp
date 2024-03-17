@@ -6,6 +6,8 @@
 
 #include "IAUSEvaluator.h"
 
+#include UE_INLINE_GENERATED_CPP_BY_NAME(IAUSConsideration_LoS)
+
 UIAUSConsideration_LoS::UIAUSConsideration_LoS()
 {
 	NodeName = TEXT("Line of Sight to Target");

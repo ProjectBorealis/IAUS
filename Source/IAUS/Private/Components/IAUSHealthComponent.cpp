@@ -2,6 +2,8 @@
 
 #include "Components/IAUSHealthComponent.h"
 
+#include UE_INLINE_GENERATED_CPP_BY_NAME(IAUSHealthComponent)
+
 // Sets default values for this component's properties
 UIAUSHealthComponent::UIAUSHealthComponent()
 {

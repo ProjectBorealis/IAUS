@@ -2,6 +2,8 @@
 
 #include "Composites/IAUSBTComposite_Behavior.h"
 
+#include UE_INLINE_GENERATED_CPP_BY_NAME(IAUSBTComposite_Behavior)
+
 UIAUSBTComposite_Behavior::UIAUSBTComposite_Behavior(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/)
 {
 	bUseNodeActivationNotify = true;

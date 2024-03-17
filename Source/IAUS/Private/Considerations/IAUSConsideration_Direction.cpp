@@ -6,6 +6,8 @@
 
 #include "IAUSEvaluator.h"
 
+#include UE_INLINE_GENERATED_CPP_BY_NAME(IAUSConsideration_Direction)
+
 UIAUSConsideration_Direction::UIAUSConsideration_Direction() {}
 
 float UIAUSConsideration_Direction::Score(const FIAUSBehaviorContext& Context) const

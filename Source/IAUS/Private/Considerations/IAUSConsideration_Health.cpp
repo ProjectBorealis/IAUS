@@ -7,6 +7,8 @@
 #include "Components/IAUSBaseHealthComponent.h"
 #include "IAUSEvaluator.h"
 
+#include UE_INLINE_GENERATED_CPP_BY_NAME(IAUSConsideration_Health)
+
 UIAUSConsideration_Health::UIAUSConsideration_Health()
 {
 	TargetsSelf = true;

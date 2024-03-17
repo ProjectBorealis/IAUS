@@ -4,6 +4,8 @@
 
 #include "Math/UnrealMathUtility.h"
 
+#include UE_INLINE_GENERATED_CPP_BY_NAME(IAUSResponseCurve)
+
 float UIAUSResponseCurve::ComputeValue(const float x) const
 {
 	return 0.0;

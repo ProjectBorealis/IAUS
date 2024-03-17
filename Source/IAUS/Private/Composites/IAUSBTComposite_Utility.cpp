@@ -7,6 +7,8 @@
 #include "Composites/IAUSBTComposite_Behavior.h"
 #include "Decorators/IAUSBTDecorator_Consideration.h"
 
+#include UE_INLINE_GENERATED_CPP_BY_NAME(IAUSBTComposite_Utility)
+
 UIAUSBTComposite_Utility::UIAUSBTComposite_Utility(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/) : Super(ObjectInitializer)
 {
 	NodeName = TEXT("Utility Selector");

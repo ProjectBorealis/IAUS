@@ -7,6 +7,8 @@
 
 #include "IAUSEvaluator.h"
 
+#include UE_INLINE_GENERATED_CPP_BY_NAME(IAUSConsideration_LineOfSightBetweenActors)
+
 UIAUSConsideration_LineOfSightBetweenActors::UIAUSConsideration_LineOfSightBetweenActors()
 {
 	NodeName = TEXT("Line of Sight Between Actors");

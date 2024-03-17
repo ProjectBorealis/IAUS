@@ -11,6 +11,8 @@
 #include "Decorators/IAUSBTDecorator_Consideration.h"
 #include "IAUSCommon.h"
 
+#include UE_INLINE_GENERATED_CPP_BY_NAME(IAUSBTDecorator_Utility)
+
 DECLARE_CYCLE_STAT(TEXT("IAUS Decorator Tick Node"), STAT_IAUSDecoratorTickNode, STATGROUP_IAUS);
 
 UIAUSBTDecorator_Utility::UIAUSBTDecorator_Utility(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/) : Super(ObjectInitializer)
