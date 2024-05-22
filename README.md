@@ -3,7 +3,7 @@
 
 # IAUS
 
-Infinite axis utility system for UE4 Behavior Trees.
+Infinite axis utility system for UE5 Behavior Trees.
 
 # Usage
 
