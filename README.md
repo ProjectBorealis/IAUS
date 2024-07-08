@@ -7,7 +7,7 @@ Infinite axis utility system for UE5 Behavior Trees.
 
 # Build Note
 
-At the current moment, we require a [custom engine patch](https://github.com/ProjectBorealisTeam/UnrealEngine/commit/8cd75d32df9673839becb9db184a11ea04e7e421) for this plugin function.
+At the current moment, we require a [custom engine patch](https://github.com/ProjectBorealisTeam/UnrealEngine/commit/2628348d6ecc75d6711cc92731cbaf19b1f23fd4) for this plugin function.
 
 # Usage
 
